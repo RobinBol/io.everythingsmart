@@ -1,0 +1,19 @@
+{
+  "type": "mdns-sd",
+  "mdns-sd": {
+    "name": "_esphomelib",
+    "protocol": "tcp"
+  },
+  "id": "{{txt.mac}}",
+  "conditions": [
+    [
+      {
+        "field": "txt.project_name",
+        "match": {
+          "type": "string",
+          "value": "Everything_Smart_Technology.Everything_Presence_One"
+        }
+      }
+    ]
+  ]
+}

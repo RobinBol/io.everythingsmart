@@ -1,0 +1,490 @@
+{
+  "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
+  "id": "io.everythingsmart",
+  "version": "1.0.0",
+  "compatibility": ">=5.0.0",
+  "sdk": 3,
+  "platforms": ["local"],
+  "name": {
+    "en": "Everything Smart"
+  },
+  "tags": {
+    "en": ["everything", "presence", "everythingsmart", "mmwave"]
+  },
+  "brandColor": "#5621F5",
+  "description": {
+    "en": "Builing a Better Smart Home"
+  },
+  "category": ["security"],
+  "permissions": [],
+  "images": {
+    "small": "/assets/images/small.png",
+    "large": "/assets/images/large.png",
+    "xlarge": "/assets/images/xlarge.png"
+  },
+  "author": {
+    "name": "Robin Bolscher",
+    "email": "robinbolscher@gmail.com"
+  },
+  "homepage": "https://everythingsmarthome.github.io/everything-presence-one/",
+  "source": "https://github.com/robinbol/io.everythingsmart/",
+  "bugs": {
+    "url": "https://github.com/robinbol/io.everythingsmart/issues"
+  },
+  "contributing": {
+    "donate": {
+      "paypal": {
+        "username": "robinbolscher"
+      },
+      "githubSponsors": {
+        "username": "RobinBol"
+      }
+    }
+  },
+  "flow": {
+    "triggers": [
+      {
+        "id": "alarm_motion.pir_true",
+        "highlight": true,
+        "title": {
+          "en": "The motion alarm (PIR) turned on",
+          "nl": "De bewegingsmelder (PIR) gaat aan",
+          "de": "Der Bewegungs-Alarm (PIR) ist angegangen",
+          "fr": "L'alarme mouvement (PIR) s'est activée",
+          "it": "L'allarme di movimento (PIR) è stato attivato",
+          "sv": "Rörelselarmet (PIR) aktiverat",
+          "no": "Bevegelsesalarmen (PIR) aktivert",
+          "es": "La alarma de movimiento (PIR) se ha activado",
+          "da": "Bevægelsesalarmen (PIR) blev aktiveret",
+          "ru": "Сигнал движения (PIR) включен",
+          "pl": "Czujnik ruchu (PIR) włączony"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=everything-presence-one"
+          }
+        ]
+      },
+      {
+        "id": "alarm_motion.pir_false",
+        "title": {
+          "en": "The motion alarm (PIR) turned off",
+          "nl": "De bewegingsmelder (PIR) gaat uit",
+          "de": "Der Bewegungs-Alarm (PIR) ist ausgegangen",
+          "fr": "L'alarme mouvement (PIR) s'est désactivée",
+          "it": "L'allarme di movimento (PIR) è stato disattivato",
+          "sv": "Rörelselarmet (PIR) inaktiverat",
+          "no": "Bevegelsesalarmen (PIR) deaktivert",
+          "es": "La alarma de movimiento (PIR) se ha desactivado",
+          "da": "Bevægelsesalarmen (PIR) blev deaktiveret",
+          "ru": "Сигнал движения (PIR) выключен",
+          "pl": "Czujnik ruchu (PIR) wyłączony"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=everything-presence-one"
+          }
+        ]
+      },
+      {
+        "id": "alarm_motion.mmwave_true",
+        "highlight": true,
+        "title": {
+          "en": "The motion alarm (mmWave) turned on",
+          "nl": "De bewegingsmelder (mmWave) gaat aan",
+          "de": "Der Bewegungs-Alarm (mmWave) ist angegangen",
+          "fr": "L'alarme mouvement (mmWave) s'est activée",
+          "it": "L'allarme di movimento (mmWave) è stato attivato",
+          "sv": "Rörelselarmet (mmWave) aktiverat",
+          "no": "Bevegelsesalarmen (mmWave) aktivert",
+          "es": "La alarma de movimiento (mmWave) se ha activado",
+          "da": "Bevægelsesalarmen (mmWave) blev aktiveret",
+          "ru": "Сигнал движения (mmWave) включен",
+          "pl": "Czujnik ruchu (mmWave) włączony"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=everything-presence-one"
+          }
+        ]
+      },
+      {
+        "id": "alarm_motion.mmwave_false",
+        "title": {
+          "en": "The motion alarm (mmWave) turned off",
+          "nl": "De bewegingsmelder (mmWave) gaat uit",
+          "de": "Der Bewegungs-Alarm (mmWave) ist ausgegangen",
+          "fr": "L'alarme mouvement (mmWave) s'est désactivée",
+          "it": "L'allarme di movimento (mmWave) è stato disattivato",
+          "sv": "Rörelselarmet (mmWave) inaktiverat",
+          "no": "Bevegelsesalarmen (mmWave) deaktivert",
+          "es": "La alarma de movimiento (mmWave) se ha desactivado",
+          "da": "Bevægelsesalarmen (mmWave) blev deaktiveret",
+          "ru": "Сигнал движения (mmWave) выключен",
+          "pl": "Czujnik ruchu (mmWave) wyłączony"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=everything-presence-one"
+          }
+        ]
+      }
+    ],
+    "conditions": [
+      {
+        "id": "alarm_motion.pir",
+        "title": {
+          "en": "The motion alarm (PIR) is !{{on|off}}",
+          "nl": "De bewegingsmelder (PIR) is !{{aan|uit}}",
+          "de": "Der Bewegungs-Alarm (PIR) ist !{{an|aus}}",
+          "fr": "L'alarme mouvement (PIR) est !{{en marche|arrêtée}}",
+          "it": "L'allarme di movimento (PIR) è !{{acceso|spento}}",
+          "sv": "Rörelselarmet (PIR) är !{{på|av}}",
+          "no": "Bevegelsesalarmen (PIR) er !{{på|av}}",
+          "es": "La alarma de movimiento (PIR) está !{{activada|desactivada}}",
+          "da": "Bevægelsesalarmen (PIR) er !{{tændt|slukket}}",
+          "ru": "Сигнал движения (PIR) !{{вкл.|выкл.}}",
+          "pl": "Czujnik ruchu (PIR) !{{włączony|wyłączony}}"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=everything-presence-one"
+          }
+        ]
+      },
+      {
+        "id": "alarm_motion.mmwave",
+        "title": {
+          "en": "The motion alarm (mmWave) is !{{on|off}}",
+          "nl": "De bewegingsmelder (mmWave) is !{{aan|uit}}",
+          "de": "Der Bewegungs-Alarm (mmWave) ist !{{an|aus}}",
+          "fr": "L'alarme mouvement (mmWave) est !{{en marche|arrêtée}}",
+          "it": "L'allarme di movimento (mmWave) è !{{acceso|spento}}",
+          "sv": "Rörelselarmet (mmWave) är !{{på|av}}",
+          "no": "Bevegelsesalarmen (mmWave) er !{{på|av}}",
+          "es": "La alarma de movimiento (mmWave) está !{{activada|desactivada}}",
+          "da": "Bevægelsesalarmen (mmWave) er !{{tændt|slukket}}",
+          "ru": "Сигнал движения (mmWave) !{{вкл.|выкл.}}",
+          "pl": "Czujnik ruchu (mmWave) !{{włączony|wyłączony}}"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=everything-presence-one"
+          }
+        ]
+      }
+    ]
+  },
+  "drivers": [
+    {
+      "name": {
+        "en": "Everything Presence One"
+      },
+      "class": "sensor",
+      "capabilities": [
+        "measure_humidity",
+        "measure_luminance",
+        "alarm_motion",
+        "alarm_motion.pir",
+        "alarm_motion.mmwave",
+        "measure_temperature"
+      ],
+      "capabilitiesOptions": {
+        "alarm_motion.pir": {
+          "title": {
+            "en": "Motion alarm (PIR)",
+            "nl": "Bewegingsalarm (PIR)",
+            "de": "Bewegungs-Alarm (PIR)",
+            "fr": "Alarme mouvement (PIR)",
+            "it": "Allarme di movimento (PIR)",
+            "sv": "Rörelselarm (PIR)",
+            "no": "Bevegelsesalarm (PIR)",
+            "es": "Alarma de movimiento (PIR)",
+            "da": "Bevægelsesalarm (PIR)",
+            "ru": "Сигнал движения (PIR)",
+            "pl": "Czujnik ruchu (PIR)"
+          },
+          "insightsTitleTrue": {
+            "en": "Motion alarm (PIR) turned on",
+            "nl": "Bewegingsalarm (PIR) ging af",
+            "de": "Bewegungs-Alarm (PIR) ist angegangen",
+            "fr": "Alarme mouvement (PIR) s'est déclenchée",
+            "it": "Allarme di movimento (PIR) attivato",
+            "sv": "Rörelselarm (PIR) aktiverat",
+            "no": "Bevegelsesalarm (PIR) aktivert",
+            "es": "Alarma de movimiento (PIR) activada",
+            "da": "Bevægelsesalarm (PIR) blev aktiveret",
+            "ru": "Сигнал движения (PIR) включен",
+            "pl": "Czujnik ruchu (PIR) włączony"
+          },
+          "insightsTitleFalse": {
+            "en": "Motion alarm (PIR) turned off",
+            "nl": "Bewegingsalarm (PIR) ging uit",
+            "de": "Bewegungs-Alarm (PIR) ist ausgegangen",
+            "fr": "Alarme mouvement (PIR) s'est désactivée",
+            "it": "Allarme di movimento (PIR) disattivato",
+            "sv": "Rörelselarm (PIR) inaktiverat",
+            "no": "Bevegelsesalarm (PIR) deaktivert",
+            "es": "Alarma de movimiento (PIR) desactivada",
+            "da": "Bevægelsesalarm (PIR) blev deaktiveret",
+            "ru": "Сигнал движения (PIR) выключен",
+            "pl": "Czujnik ruchu (PIR) wyłączony"
+          }
+        },
+        "alarm_motion.mmwave": {
+          "title": {
+            "en": "Motion alarm (mmWave)",
+            "nl": "Bewegingsalarm (mmWave)",
+            "de": "Bewegungs-Alarm (mmWave)",
+            "fr": "Alarme mouvement (mmWave)",
+            "it": "Allarme di movimento (mmWave)",
+            "sv": "Rörelselarm (mmWave)",
+            "no": "Bevegelsesalarm (mmWave)",
+            "es": "Alarma de movimiento (mmWave)",
+            "da": "Bevægelsesalarm (mmWave)",
+            "ru": "Сигнал движения (mmWave)",
+            "pl": "Czujnik ruchu (mmWave)"
+          },
+          "insightsTitleTrue": {
+            "en": "Motion alarm (mmWave) turned on",
+            "nl": "Bewegingsalarm (mmWave) ging af",
+            "de": "Bewegungs-Alarm (mmWave) ist angegangen",
+            "fr": "Alarme mouvement (mmWave) s'est déclenchée",
+            "it": "Allarme di movimento (mmWave) attivato",
+            "sv": "Rörelselarm (mmWave) aktiverat",
+            "no": "Bevegelsesalarm (mmWave) aktivert",
+            "es": "Alarma de movimiento (mmWave) activada",
+            "da": "Bevægelsesalarm (mmWave) blev aktiveret",
+            "ru": "Сигнал движения (mmWave) включен",
+            "pl": "Czujnik ruchu (mmWave) włączony"
+          },
+          "insightsTitleFalse": {
+            "en": "Motion alarm (mmWave) turned off",
+            "nl": "Bewegingsalarm (mmWave) ging uit",
+            "de": "Bewegungs-Alarm (mmWave) ist ausgegangen",
+            "fr": "Alarme mouvement (mmWave) s'est désactivée",
+            "it": "Allarme di movimento (mmWave) disattivato",
+            "sv": "Rörelselarm (mmWave) inaktiverat",
+            "no": "Bevegelsesalarm (mmWave) deaktivert",
+            "es": "Alarma de movimiento (mmWave) desactivada",
+            "da": "Bevægelsesalarm (mmWave) blev deaktiveret",
+            "ru": "Сигнал движения (mmWave) выключен",
+            "pl": "Czujnik ruchu (mmWave) wyłączony"
+          }
+        }
+      },
+      "platforms": ["local"],
+      "connectivity": ["lan"],
+      "discovery": "everything-presence-one",
+      "images": {
+        "small": "/drivers/everything-presence-one/assets/images/small.jpg",
+        "large": "/drivers/everything-presence-one/assets/images/large.jpg",
+        "xlarge": "/drivers/everything-presence-one/assets/images/xlarge.jpg"
+      },
+      "energy": {
+        "approximation": {
+          "usageConstant": 1
+        }
+      },
+      "pair": [
+        {
+          "id": "list_my_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_my_devices"
+          }
+        },
+        {
+          "id": "add_my_devices",
+          "template": "add_devices"
+        }
+      ],
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "Information"
+          },
+          "children": [
+            {
+              "id": "mac",
+              "type": "label",
+              "label": {
+                "en": "MAC address"
+              },
+              "value": ""
+            },
+            {
+              "id": "host",
+              "type": "label",
+              "label": {
+                "en": "Host address"
+              },
+              "value": ""
+            },
+            {
+              "id": "port",
+              "type": "label",
+              "label": {
+                "en": "Port"
+              },
+              "value": ""
+            },
+            {
+              "id": "esp_home_version",
+              "type": "label",
+              "label": {
+                "en": "ESPHome version"
+              },
+              "value": ""
+            },
+            {
+              "id": "project_version",
+              "type": "label",
+              "label": {
+                "en": "Project version"
+              },
+              "value": ""
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Status LEDs"
+          },
+          "children": [
+            {
+              "id": "esp32_status_led",
+              "type": "checkbox",
+              "value": true,
+              "label": {
+                "en": "ESP32 status LED"
+              },
+              "hint": {
+                "en": "Enable or disable the ESP32 status LED."
+              }
+            },
+            {
+              "id": "mmwave_led",
+              "type": "checkbox",
+              "value": true,
+              "label": {
+                "en": "mmWave status LED"
+              },
+              "hint": {
+                "en": "Enable or disable the mmWave sensor status LED. The status LED indicates whether the mmWave sensor is detecting presence."
+              }
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "mmWave"
+          },
+          "children": [
+            {
+              "id": "mmwave_sensitivity",
+              "type": "number",
+              "label": {
+                "en": "mmWave sensitivity"
+              },
+              "value": 5,
+              "min": 0,
+              "max": 9,
+              "hint": {
+                "en": "Configure the sensitivity of the mmWave sensor. Sensitivity is how much movement is required to trigger the sensor. This is important for accurate mmWave occupancy detection. See the Everything Presence One documentation for more information."
+              }
+            },
+            {
+              "id": "mmwave_distance",
+              "type": "number",
+              "label": {
+                "en": "mmWave distance"
+              },
+              "value": 3,
+              "min": 0,
+              "max": 800,
+              "step": 15,
+              "units": {
+                "en": "cm"
+              },
+              "hint": {
+                "en": "Configure the distance of the room the sensor is placed in. This is important for accurate mmWave occupancy detection. See the Everything Presence One documentation for more information."
+              }
+            },
+            {
+              "id": "mmwave_on_latency",
+              "type": "number",
+              "label": {
+                "en": "mmWave on latency"
+              },
+              "value": 3,
+              "min": 0,
+              "max": 60,
+              "step": 0.5,
+              "units": {
+                "en": "seconds"
+              },
+              "hint": {
+                "en": "Configure the on latency of the mmWave sensor. On latency sets for how long the object must be moving for, before it is considered as moving and thus triggering the sensor. This is important for accurate mmWave occupancy detection. See the Everything Presence One documentation for more information."
+              }
+            },
+            {
+              "id": "mmwave_off_latency",
+              "type": "number",
+              "label": {
+                "en": "mmWave off latency"
+              },
+              "value": 3,
+              "min": 1,
+              "max": 60,
+              "step": 1,
+              "units": {
+                "en": "seconds"
+              },
+              "hint": {
+                "en": "Configure the off latency of the mmWave sensor. Off latency sets for how long the object must be still, before it is considered as non-moving and thus resetting the sensor. This is important for accurate mmWave occupancy detection. See the Everything Presence One documentation for more information."
+              }
+            }
+          ]
+        }
+      ],
+      "id": "everything-presence-one"
+    }
+  ],
+  "discovery": {
+    "everything-presence-one": {
+      "type": "mdns-sd",
+      "mdns-sd": {
+        "name": "_esphomelib",
+        "protocol": "tcp"
+      },
+      "id": "{{txt.mac}}",
+      "conditions": [
+        [
+          {
+            "field": "txt.project_name",
+            "match": {
+              "type": "string",
+              "value": "Everything_Smart_Technology.Everything_Presence_One"
+            }
+          }
+        ]
+      ]
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "error": {
+    "unavailable": "Offline, make sure the device is powered on.",
+    "connect_timeout": "Connect timeout, make sure the device is powered on."
+  }
+}

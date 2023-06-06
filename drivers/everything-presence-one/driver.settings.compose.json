@@ -1,0 +1,116 @@
+[
+  {
+    "type": "group",
+    "label": { "en": "Information" },
+    "children": [
+      {
+        "id": "mac",
+        "type": "label",
+        "label": { "en": "MAC address" },
+        "value": ""
+      },
+      {
+        "id": "host",
+        "type": "label",
+        "label": { "en": "Host address" },
+        "value": ""
+      },
+      {
+        "id": "port",
+        "type": "label",
+        "label": { "en": "Port" },
+        "value": ""
+      },
+      {
+        "id": "esp_home_version",
+        "type": "label",
+        "label": { "en": "ESPHome version" },
+        "value": ""
+      },
+      {
+        "id": "project_version",
+        "type": "label",
+        "label": { "en": "Project version" },
+        "value": ""
+      }
+    ]
+  },
+  {
+    "type": "group",
+    "label": { "en": "Status LEDs" },
+    "children": [
+      {
+        "id": "esp32_status_led",
+        "type": "checkbox",
+        "value": true,
+        "label": { "en": "ESP32 status LED" },
+        "hint": { "en": "Enable or disable the ESP32 status LED." }
+      },
+      {
+        "id": "mmwave_led",
+        "type": "checkbox",
+        "value": true,
+        "label": { "en": "mmWave status LED" },
+        "hint": {
+          "en": "Enable or disable the mmWave sensor status LED. The status LED indicates whether the mmWave sensor is detecting presence."
+        }
+      }
+    ]
+  },
+  {
+    "type": "group",
+    "label": { "en": "mmWave" },
+    "children": [
+      {
+        "id": "mmwave_sensitivity",
+        "type": "number",
+        "label": { "en": "mmWave sensitivity" },
+        "value": 5,
+        "min": 0,
+        "max": 9,
+        "hint": {
+          "en": "Configure the sensitivity of the mmWave sensor. Sensitivity is how much movement is required to trigger the sensor. This is important for accurate mmWave occupancy detection. See the Everything Presence One documentation for more information."
+        }
+      },
+      {
+        "id": "mmwave_distance",
+        "type": "number",
+        "label": { "en": "mmWave distance" },
+        "value": 3,
+        "min": 0,
+        "max": 800,
+        "step": 15,
+        "units": { "en": "cm" },
+        "hint": {
+          "en": "Configure the distance of the room the sensor is placed in. This is important for accurate mmWave occupancy detection. See the Everything Presence One documentation for more information."
+        }
+      },
+      {
+        "id": "mmwave_on_latency",
+        "type": "number",
+        "label": { "en": "mmWave on latency" },
+        "value": 3,
+        "min": 0,
+        "max": 60,
+        "step": 0.5,
+        "units": { "en": "seconds" },
+        "hint": {
+          "en": "Configure the on latency of the mmWave sensor. On latency sets for how long the object must be moving for, before it is considered as moving and thus triggering the sensor. This is important for accurate mmWave occupancy detection. See the Everything Presence One documentation for more information."
+        }
+      },
+      {
+        "id": "mmwave_off_latency",
+        "type": "number",
+        "label": { "en": "mmWave off latency" },
+        "value": 3,
+        "min": 1,
+        "max": 60,
+        "step": 1,
+        "units": { "en": "seconds" },
+        "hint": {
+          "en": "Configure the off latency of the mmWave sensor. Off latency sets for how long the object must be still, before it is considered as non-moving and thus resetting the sensor. This is important for accurate mmWave occupancy detection. See the Everything Presence One documentation for more information."
+        }
+      }
+    ]
+  }
+]

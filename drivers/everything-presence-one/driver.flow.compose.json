@@ -1,0 +1,104 @@
+{
+  "triggers": [
+    {
+      "id": "alarm_motion.pir_true",
+      "highlight": true,
+      "title": {
+        "en": "The motion alarm (PIR) turned on",
+        "nl": "De bewegingsmelder (PIR) gaat aan",
+        "de": "Der Bewegungs-Alarm (PIR) ist angegangen",
+        "fr": "L'alarme mouvement (PIR) s'est activée",
+        "it": "L'allarme di movimento (PIR) è stato attivato",
+        "sv": "Rörelselarmet (PIR) aktiverat",
+        "no": "Bevegelsesalarmen (PIR) aktivert",
+        "es": "La alarma de movimiento (PIR) se ha activado",
+        "da": "Bevægelsesalarmen (PIR) blev aktiveret",
+        "ru": "Сигнал движения (PIR) включен",
+        "pl": "Czujnik ruchu (PIR) włączony"
+      }
+    },
+    {
+      "id": "alarm_motion.pir_false",
+      "title": {
+        "en": "The motion alarm (PIR) turned off",
+        "nl": "De bewegingsmelder (PIR) gaat uit",
+        "de": "Der Bewegungs-Alarm (PIR) ist ausgegangen",
+        "fr": "L'alarme mouvement (PIR) s'est désactivée",
+        "it": "L'allarme di movimento (PIR) è stato disattivato",
+        "sv": "Rörelselarmet (PIR) inaktiverat",
+        "no": "Bevegelsesalarmen (PIR) deaktivert",
+        "es": "La alarma de movimiento (PIR) se ha desactivado",
+        "da": "Bevægelsesalarmen (PIR) blev deaktiveret",
+        "ru": "Сигнал движения (PIR) выключен",
+        "pl": "Czujnik ruchu (PIR) wyłączony"
+      }
+    },
+    {
+      "id": "alarm_motion.mmwave_true",
+      "highlight": true,
+      "title": {
+        "en": "The motion alarm (mmWave) turned on",
+        "nl": "De bewegingsmelder (mmWave) gaat aan",
+        "de": "Der Bewegungs-Alarm (mmWave) ist angegangen",
+        "fr": "L'alarme mouvement (mmWave) s'est activée",
+        "it": "L'allarme di movimento (mmWave) è stato attivato",
+        "sv": "Rörelselarmet (mmWave) aktiverat",
+        "no": "Bevegelsesalarmen (mmWave) aktivert",
+        "es": "La alarma de movimiento (mmWave) se ha activado",
+        "da": "Bevægelsesalarmen (mmWave) blev aktiveret",
+        "ru": "Сигнал движения (mmWave) включен",
+        "pl": "Czujnik ruchu (mmWave) włączony"
+      }
+    },
+    {
+      "id": "alarm_motion.mmwave_false",
+      "title": {
+        "en": "The motion alarm (mmWave) turned off",
+        "nl": "De bewegingsmelder (mmWave) gaat uit",
+        "de": "Der Bewegungs-Alarm (mmWave) ist ausgegangen",
+        "fr": "L'alarme mouvement (mmWave) s'est désactivée",
+        "it": "L'allarme di movimento (mmWave) è stato disattivato",
+        "sv": "Rörelselarmet (mmWave) inaktiverat",
+        "no": "Bevegelsesalarmen (mmWave) deaktivert",
+        "es": "La alarma de movimiento (mmWave) se ha desactivado",
+        "da": "Bevægelsesalarmen (mmWave) blev deaktiveret",
+        "ru": "Сигнал движения (mmWave) выключен",
+        "pl": "Czujnik ruchu (mmWave) wyłączony"
+      }
+    }
+  ],
+  "conditions": [
+    {
+      "id": "alarm_motion.pir",
+      "title": {
+        "en": "The motion alarm (PIR) is !{{on|off}}",
+        "nl": "De bewegingsmelder (PIR) is !{{aan|uit}}",
+        "de": "Der Bewegungs-Alarm (PIR) ist !{{an|aus}}",
+        "fr": "L'alarme mouvement (PIR) est !{{en marche|arrêtée}}",
+        "it": "L'allarme di movimento (PIR) è !{{acceso|spento}}",
+        "sv": "Rörelselarmet (PIR) är !{{på|av}}",
+        "no": "Bevegelsesalarmen (PIR) er !{{på|av}}",
+        "es": "La alarma de movimiento (PIR) está !{{activada|desactivada}}",
+        "da": "Bevægelsesalarmen (PIR) er !{{tændt|slukket}}",
+        "ru": "Сигнал движения (PIR) !{{вкл.|выкл.}}",
+        "pl": "Czujnik ruchu (PIR) !{{włączony|wyłączony}}"
+      }
+    },
+    {
+      "id": "alarm_motion.mmwave",
+      "title": {
+        "en": "The motion alarm (mmWave) is !{{on|off}}",
+        "nl": "De bewegingsmelder (mmWave) is !{{aan|uit}}",
+        "de": "Der Bewegungs-Alarm (mmWave) ist !{{an|aus}}",
+        "fr": "L'alarme mouvement (mmWave) est !{{en marche|arrêtée}}",
+        "it": "L'allarme di movimento (mmWave) è !{{acceso|spento}}",
+        "sv": "Rörelselarmet (mmWave) är !{{på|av}}",
+        "no": "Bevegelsesalarmen (mmWave) er !{{på|av}}",
+        "es": "La alarma de movimiento (mmWave) está !{{activada|desactivada}}",
+        "da": "Bevægelsesalarmen (mmWave) er !{{tændt|slukket}}",
+        "ru": "Сигнал движения (mmWave) !{{вкл.|выкл.}}",
+        "pl": "Czujnik ruchu (mmWave) !{{włączony|wyłączony}}"
+      }
+    }
+  ]
+}
