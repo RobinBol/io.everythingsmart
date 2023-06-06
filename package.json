@@ -5,7 +5,8 @@
   "scripts": {
     "build": "npm run format && tsc && homey app build",
     "lint": "eslint --ext .js,.ts --ignore-path .gitignore .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "prepare": "husky install"
   },
   "devDependencies": {
     "@tsconfig/node12": "^1.0.11",
@@ -16,7 +17,8 @@
     "eslint-config-prettier": "^8.8.0",
     "homey": "^2.34.0",
     "prettier": "^2.8.8",
-    "typescript": "^5.0.4"
+    "typescript": "^5.0.4",
+    "husky": "^8.0.0"
   },
   "dependencies": {
     "@2colors/esphome-native-api": "^1.2.3",
