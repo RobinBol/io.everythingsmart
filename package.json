@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "app.ts",
   "scripts": {
-    "build": "npm run format && tsc",
+    "build": "npm run format && tsc && homey app build",
     "lint": "eslint --ext .js,.ts --ignore-path .gitignore .",
     "format": "prettier --write ."
   },
