@@ -11,6 +11,7 @@ const discoveryResultSchema = z.object({
     project_version: z.string()
   }),
   host: z.string(),
+  address: z.string(),
   port: z.number(),
   name: z.string()
 });
@@ -45,7 +46,8 @@ class EverythingPresenceOneDriver extends Homey.Driver {
         },
         store: {
           host: parseResult.data.host,
-          port: parseResult.data.port
+          port: parseResult.data.port,
+          address: parseResult.data.address
         },
         settings: {
           mac: formatMacString(parseResult.data.txt.mac),
