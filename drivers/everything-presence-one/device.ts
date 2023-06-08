@@ -1,8 +1,14 @@
+import Debug from 'debug';
+
 import { z } from 'zod';
 // @ts-expect-error Client is not typed
 import { Client, Connection } from '@2colors/esphome-native-api';
 
 import Homey from 'homey';
+
+const debug = Debug('epo');
+
+Debug.enable(Homey.env.DEBUG_LOGGING);
 
 const CONNECT_TIMEOUT = 15000;
 
@@ -201,8 +207,12 @@ interface DiscoveryResult {
 // };
 
 class EverythingPresenceOneDevice extends Homey.Device {
+  private debugEntity = debug.extend('entity');
+  private debugClient = debug.extend('client');
+  private debugDiscovery = debug.extend('discovery');
   private client?: Client;
   private entities: Map<string, { data: ParsedEntityData; original: unknown }> = new Map();
+  private connectingPromise: Promise<Client> | null = null;
 
   /**
    * onInit is called when the device is initialized.
@@ -220,7 +230,7 @@ class EverythingPresenceOneDevice extends Homey.Device {
       host: `${this.getStoreValue('host')}.local`,
       port: this.getStoreValue('port')
     };
-    this.log('Client connect:', addressProps);
+    this.debugClient('connecting:', addressProps);
     this.client = new Client({
       ...addressProps,
       clearSession: false,
@@ -243,35 +253,38 @@ class EverythingPresenceOneDevice extends Homey.Device {
 
     // Listen for client errors
     this.client.on('error', (error: unknown) => {
-      this.log('Client error:', error);
+      this.debugClient('error:', error);
       this.setUnavailable(this.homey.__('error.unavailable')).catch((err) =>
-        this.error('Could not set unavailable', err)
+        this.log('Could not set unavailable', err)
       );
     });
 
-    return new Promise((resolve, reject) => {
+    this.connectingPromise = new Promise((resolve, reject) => {
       const connectTimeout = this.homey.setTimeout(
         () => reject(new Error(this.homey.__('error.connect_timeout'))),
         CONNECT_TIMEOUT
       );
       this.client.connect();
       this.client.on('initialized', () => {
-        this.log('Client initialized', addressProps);
+        this.debugClient('connected', addressProps);
         this.homey.clearTimeout(connectTimeout);
 
         // Fetch all entities
         this.client.connection.listEntitiesService();
 
         // Mark device as available in case it was unavailable
-        this.setAvailable().catch((err) => this.error('Could not set available', err));
+        this.setAvailable().catch((err) => this.log('Could not set available', err));
 
+        this.connectingPromise = null;
         return resolve(this.client);
       });
     });
+
+    return this.connectingPromise;
   }
 
   disconnect() {
-    this.log('Client disconnect');
+    this.debugClient('disconnect');
     this.client?.disconnect();
     this.client?.removeAllListeners();
     this.entities.forEach((entity) => {
@@ -289,6 +302,10 @@ class EverythingPresenceOneDevice extends Homey.Device {
   }
 
   async reconnect() {
+    // If already connecting just return
+    if (this.connectingPromise) return;
+
+    this.debugClient('reconnect');
     this.disconnect();
     return this.connect();
   }
@@ -301,7 +318,7 @@ class EverythingPresenceOneDevice extends Homey.Device {
     // Parse entity data
     const parseEntityResult = entitySchema.safeParse(entity);
     if (!parseEntityResult.success) {
-      this.error('Invalid entity object received, error:', parseEntityResult.error, entity);
+      this.debugEntity('Invalid entity object received, error:', parseEntityResult.error, entity);
       return;
     }
 
@@ -310,7 +327,10 @@ class EverythingPresenceOneDevice extends Homey.Device {
       data: parseEntityResult.data,
       original: entity
     });
-    this.log(`Register entity: ${parseEntityResult.data.config.objectId}:`, parseEntityResult.data);
+    this.debugEntity(
+      `Register entity: ${parseEntityResult.data.config.objectId}:`,
+      parseEntityResult.data
+    );
 
     // Validate entity.connection
     if (
@@ -349,7 +369,7 @@ class EverythingPresenceOneDevice extends Homey.Device {
   onEntityState(entityId: string, state: unknown) {
     const parseResult = entityStateSchema.safeParse(state);
     if (!parseResult.success) {
-      this.error(
+      this.debugEntity(
         `Got invalid entity state for entityId ${entityId}, error:`,
         parseResult.error,
         state
@@ -363,7 +383,7 @@ class EverythingPresenceOneDevice extends Homey.Device {
     const entity = this.entities.get(entityId)?.data;
     if (!entity) throw new Error(`Missing entity ${entityId}`);
 
-    this.log(`state`, {
+    this.debugEntity(`state`, {
       config: entity.config,
       name: entity.name,
       type: entity.type,
@@ -376,52 +396,52 @@ class EverythingPresenceOneDevice extends Homey.Device {
       case 'temperature':
         // Throw when state is not a number
         z.number().parse(parsedState.state);
-        this.log(`Capability: measure_temperature: state event`, parsedState.state);
+        this.debugEntity(`Capability: measure_temperature: state event`, parsedState.state);
         this.setCapabilityValue('measure_temperature', parsedState.state).catch((err) =>
-          this.error('Failed to set measure_temperature capability value', err)
+          this.debugEntity('Failed to set measure_temperature capability value', err)
         );
         break;
       case 'humidity':
         // Throw when state is not a number
         z.number().parse(parsedState.state);
-        this.log(`Capability: measure_humidity: state event`, parsedState.state);
+        this.debugEntity(`Capability: measure_humidity: state event`, parsedState.state);
         this.setCapabilityValue('measure_humidity', parsedState.state).catch((err) =>
-          this.error('Failed to set measure_humidity capability value', err)
+          this.debugEntity('Failed to set measure_humidity capability value', err)
         );
         break;
       case 'illuminance':
         // Throw when state is not a number
         z.number().parse(parsedState.state);
-        this.log(`Capability: measure_luminance: state event`, parsedState.state);
+        this.debugEntity(`Capability: measure_luminance: state event`, parsedState.state);
         this.setCapabilityValue('measure_luminance', parsedState.state).catch((err) =>
-          this.error('Failed to set measure_luminance capability value', err)
+          this.debugEntity('Failed to set measure_luminance capability value', err)
         );
         break;
       case 'motion':
         // Throw when state is not a boolean
         z.boolean().parse(parsedState.state);
-        this.log(`Capability: alarm_motion.pir: state event`, parsedState.state);
+        this.debugEntity(`Capability: alarm_motion.pir: state event`, parsedState.state);
         this.setCapabilityValue('alarm_motion.pir', parsedState.state).catch((err) =>
-          this.error('Failed to set alarm_motion.pir capability value', err)
+          this.debugEntity('Failed to set alarm_motion.pir capability value', err)
         );
         break;
       case 'occupancy':
         // Throw when state is not a boolean
         z.boolean().parse(parsedState.state);
         if (entity.config.uniqueId.includes('binary_sensor_mmwave')) {
-          this.log(`Capability: alarm_motion.mmwave: state event`, parsedState.state);
+          this.debugEntity(`Capability: alarm_motion.mmwave: state event`, parsedState.state);
           this.setCapabilityValue('alarm_motion.mmwave', parsedState.state).catch((err) =>
-            this.error('Failed to set alarm_motion.mmwave capability value', err)
+            this.debugEntity('Failed to set alarm_motion.mmwave capability value', err)
           );
         } else if (entity.config.uniqueId.includes('binary_sensor_occupancy')) {
-          this.log(`Capability: alarm_motion: state event`, parsedState.state);
+          this.debugEntity(`Capability: alarm_motion: state event`, parsedState.state);
           this.setCapabilityValue('alarm_motion', parsedState.state).catch((err) =>
-            this.error('Failed to set alarm_motion capability value', err)
+            this.debugEntity('Failed to set alarm_motion capability value', err)
           );
         }
         break;
       default:
-        this.error('Unknown device class:', entity.config.deviceClass);
+        this.debugEntity('Unknown device class:', entity.config.deviceClass);
     }
 
     // Read and update settings
@@ -432,7 +452,7 @@ class EverythingPresenceOneDevice extends Homey.Device {
       case DRIVER_SETTINGS.MMWAVE_DISTANCE:
         // Throw when state is not a number
         z.number().parse(parsedState.state);
-        this.log(`Setting: ${entity.config.objectId}: state event`, parsedState.state);
+        this.debugEntity(`Setting: ${entity.config.objectId}: state event`, parsedState.state);
         this.setSettings({
           [entity.config.objectId]: parsedState.state
         });
@@ -441,14 +461,14 @@ class EverythingPresenceOneDevice extends Homey.Device {
       case DRIVER_SETTINGS.ESP_32_STATUS_LED:
         // Throw when state is not a boolean
         z.boolean().parse(parsedState.state);
-        this.log(`Setting: ${entity.config.objectId}: state event`, parsedState.state);
+        this.debugEntity(`Setting: ${entity.config.objectId}: state event`, parsedState.state);
         this.setSettings({
           [entity.config.objectId]: parsedState.state
         });
 
         break;
       default:
-        this.log('Unknown setting:', entity.config.objectId);
+        this.debugEntity('Unknown setting:', entity.config.objectId);
     }
   }
 
@@ -551,10 +571,7 @@ class EverythingPresenceOneDevice extends Homey.Device {
    * @returns
    */
   onDiscoveryResult(discoveryResult: DiscoveryResult) {
-    this.log(
-      `onDiscoveryResult match: ${discoveryResult.id === this.getData().id}`,
-      discoveryResult
-    );
+    this.debugDiscovery(`result match: ${discoveryResult.id === this.getData().id}`);
     return discoveryResult.id === this.getData().id;
   }
 
@@ -563,7 +580,7 @@ class EverythingPresenceOneDevice extends Homey.Device {
    * @param discoveryResult
    */
   async onDiscoveryAvailable(discoveryResult: DiscoveryResult) {
-    this.log('onDiscoveryAvailable', discoveryResult);
+    this.debugDiscovery('available', discoveryResult);
 
     // Update address props and reconnect if needed, when this throws,
     // the device will become unavailable.
@@ -572,7 +589,7 @@ class EverythingPresenceOneDevice extends Homey.Device {
   }
 
   onDiscoveryAddressChanged(discoveryResult: DiscoveryResult) {
-    this.log('onDiscoveryAddressChanged', discoveryResult);
+    this.debugDiscovery('address changed', discoveryResult);
 
     // Update address props and reconnect if needed
     this.handleAddressChanged(discoveryResult)
@@ -582,12 +599,12 @@ class EverythingPresenceOneDevice extends Homey.Device {
         }
       })
       .catch((err) => {
-        this.error('onDiscoveryAddressChanged -> failed to reconnect', err);
+        this.debugDiscovery('address changed -> failed to reconnect', err);
       });
   }
 
   async onDiscoveryLastSeenChanged(discoveryResult: DiscoveryResult) {
-    this.log('onDiscoveryLastSeenChanged', discoveryResult);
+    this.debugDiscovery('last seen changed', discoveryResult);
   }
 }
 
