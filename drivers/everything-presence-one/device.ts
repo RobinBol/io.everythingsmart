@@ -68,6 +68,14 @@ const entitySchema = z.object({
 
 type ParsedEntityData = z.infer<typeof entitySchema>;
 
+interface DiscoveryResult {
+  id: string;
+  lastSeen: Date;
+  address?: string;
+  port?: number;
+  host?: string;
+}
+
 // Example entity
 // {
 //   _events: [Object: null prototype] {
@@ -201,9 +209,6 @@ class EverythingPresenceOneDevice extends Homey.Device {
    */
   async onInit() {
     this.log('EverythingPresenceOneDevice has been initialized');
-
-    // Connect to device
-    this.client = await this.connect();
   }
 
   /**
@@ -211,15 +216,19 @@ class EverythingPresenceOneDevice extends Homey.Device {
    * @returns
    */
   async connect(): Promise<Client> {
-    const client = new Client({
+    const addressProps = {
+      host: `${this.getStoreValue('host')}.local`,
+      port: this.getStoreValue('port')
+    };
+    this.log('Client connect:', addressProps);
+    this.client = new Client({
+      ...addressProps,
       clearSession: false,
       initializeDeviceInfo: false,
       initializeListEntities: false,
       initializeSubscribeStates: true,
       initializeSubscribeLogs: false,
       initializeSubscribeBLEAdvertisements: false,
-      host: `${this.getStoreValue('host')}`,
-      port: this.getStoreValue('port'),
       clientInfo: 'homey',
       encryptionKey: '',
       password: '', // Deprecated
@@ -230,10 +239,10 @@ class EverythingPresenceOneDevice extends Homey.Device {
     });
 
     // Listen for entities
-    client.on('newEntity', (entity: unknown) => this.registerEntity(entity));
+    this.client.on('newEntity', (entity: unknown) => this.registerEntity(entity));
 
     // Listen for client errors
-    client.on('error', (error: unknown) => {
+    this.client.on('error', (error: unknown) => {
       this.log('Client error:', error);
       this.setUnavailable(this.homey.__('error.unavailable')).catch((err) =>
         this.error('Could not set unavailable', err)
@@ -245,17 +254,43 @@ class EverythingPresenceOneDevice extends Homey.Device {
         () => reject(new Error(this.homey.__('error.connect_timeout'))),
         CONNECT_TIMEOUT
       );
-      client.connect();
-      client.on('initialized', () => {
-        this.log('Client initialized');
+      this.client.connect();
+      this.client.on('initialized', () => {
+        this.log('Client initialized', addressProps);
         this.homey.clearTimeout(connectTimeout);
 
         // Fetch all entities
-        client.connection.listEntitiesService();
+        this.client.connection.listEntitiesService();
 
-        return resolve(client);
+        // Mark device as available in case it was unavailable
+        this.setAvailable().catch((err) => this.error('Could not set available', err));
+
+        return resolve(this.client);
       });
     });
+  }
+
+  disconnect() {
+    this.log('Client disconnect');
+    this.client?.disconnect();
+    this.client?.removeAllListeners();
+    this.entities.forEach((entity) => {
+      // Validate entity.original.removeAllListeners
+      if (
+        typeof entity.original !== 'object' ||
+        entity.original === null ||
+        !('removeAllListeners' in entity.original) ||
+        typeof entity.original.removeAllListeners !== 'function'
+      ) {
+        throw new Error('Expected entity.removeAllListeners to be a function');
+      }
+      entity.original.removeAllListeners();
+    });
+  }
+
+  async reconnect() {
+    this.disconnect();
+    return this.connect();
   }
 
   /**
@@ -312,10 +347,6 @@ class EverythingPresenceOneDevice extends Homey.Device {
    * @param state
    */
   onEntityState(entityId: string, state: unknown) {
-    if (this.getAvailable() === false) {
-      this.setAvailable().catch((err) => this.error('Could not set available', err));
-    }
-
     const parseResult = entityStateSchema.safeParse(state);
     if (!parseResult.success) {
       this.error(
@@ -489,20 +520,74 @@ class EverythingPresenceOneDevice extends Homey.Device {
    */
   async onDeleted() {
     this.log('EverythingPresenceOneDevice has been deleted');
-    this.client.disconnect();
-    this.client.removeAllListeners();
-    this.entities.forEach((entity) => {
-      // Validate entity.original.removeAllListeners
+    this.disconnect();
+  }
+
+  /**
+   * Loop all address related properties from the discovery result and
+   * check if the discovery result has any props that have changed. If
+   * so, store them and re-connect.
+   * @param discoveryResult
+   */
+  async handleAddressChanged(discoveryResult: DiscoveryResult) {
+    const addressProps = ['address', 'port', 'host'] as const;
+    let addressChanged = false;
+    for (const addressProp of addressProps) {
       if (
-        typeof entity.original !== 'object' ||
-        entity.original === null ||
-        !('removeAllListeners' in entity.original) ||
-        typeof entity.original.removeAllListeners !== 'function'
+        typeof discoveryResult[addressProp] === 'string' &&
+        this.getStoreValue(addressProp) !== discoveryResult[addressProp]
       ) {
-        throw new Error('Expected entity.removeAllListeners to be a function');
+        addressChanged = true;
+        await this.setStoreValue(addressProp, discoveryResult[addressProp]);
       }
-      entity.original.removeAllListeners();
-    });
+    }
+
+    return addressChanged;
+  }
+
+  /**
+   * Return a truthy value here if the discovery result matches your device.
+   * @param discoveryResult
+   * @returns
+   */
+  onDiscoveryResult(discoveryResult: DiscoveryResult) {
+    this.log(
+      `onDiscoveryResult match: ${discoveryResult.id === this.getData().id}`,
+      discoveryResult
+    );
+    return discoveryResult.id === this.getData().id;
+  }
+
+  /**
+   * This method will be executed once when the device has been found (onDiscoveryResult returned true).
+   * @param discoveryResult
+   */
+  async onDiscoveryAvailable(discoveryResult: DiscoveryResult) {
+    this.log('onDiscoveryAvailable', discoveryResult);
+
+    // Update address props and reconnect if needed, when this throws,
+    // the device will become unavailable.
+    await this.handleAddressChanged(discoveryResult);
+    await this.reconnect();
+  }
+
+  onDiscoveryAddressChanged(discoveryResult: DiscoveryResult) {
+    this.log('onDiscoveryAddressChanged', discoveryResult);
+
+    // Update address props and reconnect if needed
+    this.handleAddressChanged(discoveryResult)
+      .then((addressChanged) => {
+        if (addressChanged) {
+          return this.reconnect();
+        }
+      })
+      .catch((err) => {
+        this.error('onDiscoveryAddressChanged -> failed to reconnect', err);
+      });
+  }
+
+  async onDiscoveryLastSeenChanged(discoveryResult: DiscoveryResult) {
+    this.log('onDiscoveryLastSeenChanged', discoveryResult);
   }
 }
 
