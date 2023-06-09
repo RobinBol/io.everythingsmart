@@ -206,6 +206,17 @@ interface DiscoveryResult {
 //   );
 // };
 
+/**
+ * On Homey Pro (Early 2023) the host property in the discovery result
+ * ends with .local, on Homey Pro (Early 2019) it doesn't,
+ * @param host
+ * @returns
+ */
+function formatHostname(host: string) {
+  if (host.endsWith('.local')) return host;
+  return `${host}.local`;
+}
+
 class EverythingPresenceOneDevice extends Homey.Device {
   private debugEntity = debug.extend('entity');
   private debugClient = debug.extend('client');
@@ -227,7 +238,7 @@ class EverythingPresenceOneDevice extends Homey.Device {
    */
   async connect(): Promise<Client> {
     const addressProps = {
-      host: `${this.getStoreValue('host')}.local`,
+      host: formatHostname(this.getStoreValue('host')),
       port: this.getStoreValue('port')
     };
     this.debugClient('connecting:', addressProps);
