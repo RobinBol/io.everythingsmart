@@ -10,6 +10,12 @@
         "value": ""
       },
       {
+        "id": "ip",
+        "type": "label",
+        "label": { "en": "IP address" },
+        "value": ""
+      },
+      {
         "id": "host",
         "type": "label",
         "label": { "en": "Host address" },

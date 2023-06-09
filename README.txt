@@ -13,4 +13,4 @@ Supported versions
 
 Other versions might work as well but haven't been tested.
 
-Disclaimer: this app is published with consent from Everything Smart. However, it is created on a voluntary basis and has no direct affiliation with Everything Smart.
+Disclaimer: this app is published with consent from Everything Smart Technology Ltd. However, it is created on a voluntary basis and has no direct affiliation with Everything Smart Technology Ltd.

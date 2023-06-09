@@ -1,3 +1,5 @@
+import dns from 'dns/promises';
+
 import Debug from 'debug';
 
 import { z } from 'zod';
@@ -223,13 +225,15 @@ class EverythingPresenceOneDevice extends Homey.Device {
   private debugDiscovery = debug.extend('discovery');
   private client?: Client;
   private entities: Map<string, { data: ParsedEntityData; original: unknown }> = new Map();
-  private connectingPromise: Promise<Client> | null = null;
 
   /**
    * onInit is called when the device is initialized.
    */
   async onInit() {
     this.log('EverythingPresenceOneDevice has been initialized');
+    this.connect().catch((err) => {
+      this.error('EverythingPresenceOneDevice failed to connect', err);
+    });
   }
 
   /**
@@ -270,7 +274,7 @@ class EverythingPresenceOneDevice extends Homey.Device {
       );
     });
 
-    this.connectingPromise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       const connectTimeout = this.homey.setTimeout(
         () => reject(new Error(this.homey.__('error.connect_timeout'))),
         CONNECT_TIMEOUT
@@ -283,15 +287,21 @@ class EverythingPresenceOneDevice extends Homey.Device {
         // Fetch all entities
         this.client.connection.listEntitiesService();
 
+        // Resolve hostname to ip address
+        dns
+          .lookup(addressProps.host)
+          .then((result) => {
+            this.debugClient('resolved hostname to:', result);
+            return this.setSettings({ ip: result.address });
+          })
+          .catch((err) => this.debugClient('failed to update ip address in settings', err));
+
         // Mark device as available in case it was unavailable
         this.setAvailable().catch((err) => this.log('Could not set available', err));
 
-        this.connectingPromise = null;
         return resolve(this.client);
       });
     });
-
-    return this.connectingPromise;
   }
 
   disconnect() {
@@ -310,15 +320,6 @@ class EverythingPresenceOneDevice extends Homey.Device {
       }
       entity.original.removeAllListeners();
     });
-  }
-
-  async reconnect() {
-    // If already connecting just return
-    if (this.connectingPromise) return;
-
-    this.debugClient('reconnect');
-    this.disconnect();
-    return this.connect();
   }
 
   /**
@@ -555,28 +556,6 @@ class EverythingPresenceOneDevice extends Homey.Device {
   }
 
   /**
-   * Loop all address related properties from the discovery result and
-   * check if the discovery result has any props that have changed. If
-   * so, store them and re-connect.
-   * @param discoveryResult
-   */
-  async handleAddressChanged(discoveryResult: DiscoveryResult) {
-    const addressProps = ['address', 'port', 'host'] as const;
-    let addressChanged = false;
-    for (const addressProp of addressProps) {
-      if (
-        typeof discoveryResult[addressProp] === 'string' &&
-        this.getStoreValue(addressProp) !== discoveryResult[addressProp]
-      ) {
-        addressChanged = true;
-        await this.setStoreValue(addressProp, discoveryResult[addressProp]);
-      }
-    }
-
-    return addressChanged;
-  }
-
-  /**
    * Return a truthy value here if the discovery result matches your device.
    * @param discoveryResult
    * @returns
@@ -592,30 +571,11 @@ class EverythingPresenceOneDevice extends Homey.Device {
    */
   async onDiscoveryAvailable(discoveryResult: DiscoveryResult) {
     this.debugDiscovery('available', discoveryResult);
-
-    // Update address props and reconnect if needed, when this throws,
-    // the device will become unavailable.
-    await this.handleAddressChanged(discoveryResult);
-    await this.reconnect();
-  }
-
-  onDiscoveryAddressChanged(discoveryResult: DiscoveryResult) {
-    this.debugDiscovery('address changed', discoveryResult);
-
-    // Update address props and reconnect if needed
-    this.handleAddressChanged(discoveryResult)
-      .then((addressChanged) => {
-        if (addressChanged) {
-          return this.reconnect();
-        }
-      })
-      .catch((err) => {
-        this.debugDiscovery('address changed -> failed to reconnect', err);
+    if (typeof discoveryResult.address === 'string') {
+      this.setSettings({ ip: discoveryResult.address }).catch((err) => {
+        this.error('Failed to update IP in settings', err);
       });
-  }
-
-  async onDiscoveryLastSeenChanged(discoveryResult: DiscoveryResult) {
-    this.debugDiscovery('last seen changed', discoveryResult);
+    }
   }
 }
 

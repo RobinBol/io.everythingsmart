@@ -46,11 +46,11 @@ class EverythingPresenceOneDriver extends Homey.Driver {
         },
         store: {
           host: parseResult.data.host,
-          port: parseResult.data.port,
-          address: parseResult.data.address
+          port: parseResult.data.port
         },
         settings: {
           mac: formatMacString(parseResult.data.txt.mac),
+          ip: parseResult.data.address,
           host: parseResult.data.host,
           port: String(parseResult.data.port),
           esp_home_version: parseResult.data.txt.version,

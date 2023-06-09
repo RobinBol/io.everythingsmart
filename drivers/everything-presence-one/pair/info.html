@@ -1,0 +1,49 @@
+<style>
+  .container {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .content-container {
+    flex-direction: column;
+    text-align: center;
+    justify-content: space-between;
+  }
+
+  .content-container .icon {
+    margin-bottom: 10%;
+    max-width: 50%;
+  }
+
+  .pair-description {
+    margin-bottom: 10%;
+  }
+</style>
+<div class="container">
+  <div class="content-container">
+    <img
+      src="/app/io.everythingsmart/drivers/everything-presence-one/assets/icon.svg"
+      alt="everything-presence-one-image"
+      class="icon"
+    />
+    <div>
+      <div class="pair-description" data-i18n="pair.description"></div>
+      <div>
+        <a id="documentation-button">
+          <button class=".homey-button-secondary-shadow" data-i18n="pair.button"></button>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  Homey.setTitle(Homey.__('pair.title'));
+  $('#documentation-button').click(function () {
+    Homey.popup('https://everythingsmarthome.github.io/everything-presence-one/');
+    return false;
+  });
+</script>

@@ -313,6 +313,12 @@
       },
       "pair": [
         {
+          "id": "info",
+          "navigation": {
+            "next": "list_my_devices"
+          }
+        },
+        {
           "id": "list_my_devices",
           "template": "list_devices",
           "navigation": {
@@ -336,6 +342,14 @@
               "type": "label",
               "label": {
                 "en": "MAC address"
+              },
+              "value": ""
+            },
+            {
+              "id": "ip",
+              "type": "label",
+              "label": {
+                "en": "IP address"
               },
               "value": ""
             },
