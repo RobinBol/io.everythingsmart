@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "app.ts",
   "scripts": {
-    "build": "npm run format && tsc && homey app build",
+    "build": "tsc && homey app build && npm run format",
     "lint": "eslint --ext .js,.ts --ignore-path .gitignore .",
     "format": "prettier --write .",
     "prepare": "husky install"
@@ -19,6 +19,7 @@
     "homey": "^2.34.0",
     "husky": "^8.0.0",
     "prettier": "^2.8.8",
+    "prettier-plugin-jsdoc": "^0.4.2",
     "typescript": "^5.0.4"
   },
   "dependencies": {

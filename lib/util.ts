@@ -1,5 +1,6 @@
 /**
  * Convert "d4d4da708528" to "d4:d4:da:70:85:28"
+ *
  * @param macString
  * @returns
  */

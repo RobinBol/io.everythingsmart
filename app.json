@@ -4,27 +4,18 @@
   "version": "1.0.2",
   "compatibility": ">=5.0.0",
   "sdk": 3,
-  "platforms": [
-    "local"
-  ],
+  "platforms": ["local"],
   "name": {
     "en": "Everything Smart"
   },
   "tags": {
-    "en": [
-      "everything",
-      "presence",
-      "everythingsmart",
-      "mmwave"
-    ]
+    "en": ["everything", "presence", "everythingsmart", "mmwave"]
   },
   "brandColor": "#5621F5",
   "description": {
     "en": "Builing a Better Smart Home"
   },
-  "category": [
-    "security"
-  ],
+  "category": ["security"],
   "permissions": [],
   "images": {
     "small": "/assets/images/small.png",
@@ -294,12 +285,8 @@
           }
         }
       },
-      "platforms": [
-        "local"
-      ],
-      "connectivity": [
-        "lan"
-      ],
+      "platforms": ["local"],
+      "connectivity": ["lan"],
       "discovery": "everything-presence-one",
       "images": {
         "small": "/drivers/everything-presence-one/assets/images/small.jpg",

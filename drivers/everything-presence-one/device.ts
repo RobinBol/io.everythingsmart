@@ -209,8 +209,9 @@ interface DiscoveryResult {
 // };
 
 /**
- * On Homey Pro (Early 2023) the host property in the discovery result
- * ends with .local, on Homey Pro (Early 2019) it doesn't,
+ * On Homey Pro (Early 2023) the host property in the discovery result ends with .local, on Homey
+ * Pro (Early 2019) it doesn't,
+ *
  * @param host
  * @returns
  */
@@ -226,9 +227,7 @@ class EverythingPresenceOneDevice extends Homey.Device {
   private client?: Client;
   private entities: Map<string, { data: ParsedEntityData; original: unknown }> = new Map();
 
-  /**
-   * onInit is called when the device is initialized.
-   */
+  /** OnInit is called when the device is initialized. */
   async onInit() {
     this.log('EverythingPresenceOneDevice has been initialized');
     this.connect().catch((err) => {
@@ -238,6 +237,7 @@ class EverythingPresenceOneDevice extends Homey.Device {
 
   /**
    * Create Client instance and connect to device.
+   *
    * @returns
    */
   async connect(): Promise<Client> {
@@ -324,6 +324,7 @@ class EverythingPresenceOneDevice extends Homey.Device {
 
   /**
    * Register an entity, bind state listener and subscribe to state events.
+   *
    * @param entity
    */
   registerEntity(entity: unknown) {
@@ -375,6 +376,7 @@ class EverythingPresenceOneDevice extends Homey.Device {
 
   /**
    * Called when a state event is received for a specific entity.
+   *
    * @param entity
    * @param state
    */
@@ -484,20 +486,19 @@ class EverythingPresenceOneDevice extends Homey.Device {
     }
   }
 
-  /**
-   * onAdded is called when the user adds the device, called just after pairing.
-   */
+  /** OnAdded is called when the user adds the device, called just after pairing. */
   async onAdded() {
     this.log('EverythingPresenceOneDevice has been added');
   }
 
   /**
-   * onSettings is called when the user updates the device's settings.
-   * @param {object} event the onSettings event data
+   * OnSettings is called when the user updates the device's settings.
+   *
+   * @param {object} event The onSettings event data
    * @param {object} event.oldSettings The old settings object
    * @param {object} event.newSettings The new settings object
    * @param {string[]} event.changedKeys An array of keys changed since the previous version
-   * @returns {Promise<string|void>} return a custom message that will be displayed
+   * @returns {Promise<string | void>} Return a custom message that will be displayed
    */
   async onSettings({
     newSettings,
@@ -539,17 +540,16 @@ class EverythingPresenceOneDevice extends Homey.Device {
   }
 
   /**
-   * onRenamed is called when the user updates the device's name.
-   * This method can be used this to synchronise the name to the device.
+   * OnRenamed is called when the user updates the device's name. This method can be used this to
+   * synchronise the name to the device.
+   *
    * @param {string} name The new name
    */
   async onRenamed(name: string) {
     this.log('EverythingPresenceOneDevice was renamed to:', name);
   }
 
-  /**
-   * onDeleted is called when the user deleted the device.
-   */
+  /** OnDeleted is called when the user deleted the device. */
   async onDeleted() {
     this.log('EverythingPresenceOneDevice has been deleted');
     this.disconnect();
@@ -557,6 +557,7 @@ class EverythingPresenceOneDevice extends Homey.Device {
 
   /**
    * Return a truthy value here if the discovery result matches your device.
+   *
    * @param discoveryResult
    * @returns
    */
@@ -566,7 +567,9 @@ class EverythingPresenceOneDevice extends Homey.Device {
   }
 
   /**
-   * This method will be executed once when the device has been found (onDiscoveryResult returned true).
+   * This method will be executed once when the device has been found (onDiscoveryResult returned
+   * true).
+   *
    * @param discoveryResult
    */
   async onDiscoveryAvailable(discoveryResult: DiscoveryResult) {
