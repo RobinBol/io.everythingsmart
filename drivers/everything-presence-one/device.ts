@@ -220,6 +220,17 @@ function formatHostname(host: string) {
   return `${host}.local`;
 }
 
+/**
+ * Get typed error message from unknown parameter.
+ *
+ * @param error
+ * @returns
+ */
+function getErrorMessage(error: unknown) {
+  if (error instanceof Error) return error.message;
+  return String(error);
+}
+
 class EverythingPresenceOneDevice extends Homey.Device {
   private debugEntity = debug.extend('entity');
   private debugClient = debug.extend('client');
@@ -269,6 +280,12 @@ class EverythingPresenceOneDevice extends Homey.Device {
     // Listen for client errors
     this.client.on('error', (error: unknown) => {
       this.debugClient('error:', error);
+      if (getErrorMessage(error).includes('Bad format: Encryption expected')) {
+        this.setUnavailable(this.homey.__('error.unavailable_encrypted')).catch((err) =>
+          this.log('Could not set unavailable', err)
+        );
+        return;
+      }
       this.setUnavailable(this.homey.__('error.unavailable')).catch((err) =>
         this.log('Could not set unavailable', err)
       );

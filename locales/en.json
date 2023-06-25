@@ -5,7 +5,8 @@
     "button": "Read more"
   },
   "error": {
-    "unavailable": "Offline, make sure the device is powered on.",
+    "unavailable": "Could not connect, make sure the device is powered on.",
+    "unavailable_encrypted": "Could not connect, disable encryption on your device.",
     "connect_timeout": "Connect timeout, make sure the device is powered on."
   }
 }
