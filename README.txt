@@ -10,6 +10,7 @@ This app allows you to configure the Everything Presence One and use the followi
 
 Supported versions
 - ESPHome version: 2023.4.2 in combination with Project version 1.1.3.
+- ESPHome version: 2023.7.1 in combination with Project version 1.1.6.
 
 Other versions might work as well but haven't been tested.
 
