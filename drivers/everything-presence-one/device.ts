@@ -83,9 +83,9 @@ interface DiscoveryResult {
   port?: number;
   host?: string;
   txt?: {
-    version?: string,
-    project_version?: string,
-  }
+    version?: string;
+    project_version?: string;
+  };
 }
 
 // Example entity
@@ -601,10 +601,16 @@ class EverythingPresenceOneDevice extends Homey.Device {
     if (typeof discoveryResult.address === 'string' && settings.ip !== discoveryResult.address) {
       settings.ip = discoveryResult.address;
     }
-    if (typeof discoveryResult.txt?.version === 'string' && settings.esp_home_version !== discoveryResult.txt.version) {
+    if (
+      typeof discoveryResult.txt?.version === 'string' &&
+      settings.esp_home_version !== discoveryResult.txt.version
+    ) {
       settings.esp_home_version = discoveryResult.txt.version;
     }
-    if (typeof discoveryResult.txt?.project_version === 'string' && settings.project_version !== discoveryResult.txt.project_version) {
+    if (
+      typeof discoveryResult.txt?.project_version === 'string' &&
+      settings.project_version !== discoveryResult.txt.project_version
+    ) {
       settings.project_version = discoveryResult.txt.project_version;
     }
 
