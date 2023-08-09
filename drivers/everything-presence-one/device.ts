@@ -82,6 +82,10 @@ interface DiscoveryResult {
   address?: string;
   port?: number;
   host?: string;
+  txt?: {
+    version?: string,
+    project_version?: string,
+  }
 }
 
 // Example entity
@@ -593,8 +597,20 @@ class EverythingPresenceOneDevice extends Homey.Device {
    */
   async onDiscoveryAvailable(discoveryResult: DiscoveryResult) {
     this.debugDiscovery('available', discoveryResult);
-    if (typeof discoveryResult.address === 'string') {
-      this.setSettings({ ip: discoveryResult.address }).catch((err) => {
+    const settings = this.getSettings();
+    if (typeof discoveryResult.address === 'string' && settings.ip !== discoveryResult.address) {
+      settings.ip = discoveryResult.address;
+    }
+    if (typeof discoveryResult.txt?.version === 'string' && settings.esp_home_version !== discoveryResult.txt.version) {
+      settings.esp_home_version = discoveryResult.txt.version;
+    }
+    if (typeof discoveryResult.txt?.project_version === 'string' && settings.project_version !== discoveryResult.txt.project_version) {
+      settings.project_version = discoveryResult.txt.project_version;
+    }
+
+    // Update settings if needed
+    if (Object.keys(settings).length > 0) {
+      this.setSettings(settings).catch((err) => {
         this.error('Failed to update IP in settings', err);
       });
     }
