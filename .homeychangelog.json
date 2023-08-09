@@ -10,5 +10,8 @@
   },
   "1.0.3": {
     "en": "Add better error message when device uses unsupported encrypted transport."
+  },
+  "1.0.4": {
+    "en": "Fixed an issue that could cause the app to crash, and added more verbose logging."
   }
 }
