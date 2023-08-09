@@ -302,7 +302,9 @@ class EverythingPresenceOneDevice extends Homey.Device {
         this.homey.clearTimeout(connectTimeout);
 
         // Fetch all entities
-        this.client.connection.listEntitiesService();
+        this.client.connection.listEntitiesService().catch((err: unknown) => {
+          this.error('Failed to list entities service:', err);
+        });
 
         // Resolve hostname to ip address
         dns
