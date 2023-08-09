@@ -13,5 +13,8 @@
   },
   "1.0.4": {
     "en": "Fixed an issue that could cause the app to crash, and added more verbose logging."
+  },
+  "1.0.5": {
+    "en": "Fix a breaking change in the EP1 API that broke mmWave and occupancy detection."
   }
 }
