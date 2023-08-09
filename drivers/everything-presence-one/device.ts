@@ -235,6 +235,38 @@ function getErrorMessage(error: unknown) {
   return String(error);
 }
 
+/**
+ * Check if entity has uniqueId that matches the binary sensor mmWave. Note: it appears that between
+ * 2023.4.2 (1.1.3) and 2023.7.1 (1.1.6) of the EP1 firmware a breaking change was introduced, the
+ * uniqueId binary_sensor_mmwave was changed to binary_sensormmwave. GitHub issue:
+ * https://github.com/EverythingSmartHome/everything-presence-one/issues/99
+ *
+ * @param entity
+ * @returns
+ */
+function includesBinarySensorMMWave(entity: ParsedEntityData) {
+  return (
+    entity.config.uniqueId.includes('binary_sensor_mmwave') ||
+    entity.config.uniqueId.includes('binary_sensormmwave')
+  );
+}
+
+/**
+ * Check if entity has uniqueId that matches the binary sensor occupancy. Note: it appears that
+ * between 2023.4.2 (1.1.3) and 2023.7.1 (1.1.6) of the EP1 firmware a breaking change was
+ * introduced, the uniqueId binary_sensor_occupancy was changed to binary_sensoroccupancy. GitHub
+ * issue: https://github.com/EverythingSmartHome/everything-presence-one/issues/99
+ *
+ * @param entity
+ * @returns
+ */
+function includesBinarySensorOccupancy(entity: ParsedEntityData) {
+  return (
+    entity.config.uniqueId.includes('binary_sensor_occupancy') ||
+    entity.config.uniqueId.includes('binary_sensoroccupancy')
+  );
+}
+
 class EverythingPresenceOneDevice extends Homey.Device {
   private debugEntity = debug.extend('entity');
   private debugClient = debug.extend('client');
@@ -465,12 +497,12 @@ class EverythingPresenceOneDevice extends Homey.Device {
       case 'occupancy':
         // Throw when state is not a boolean
         z.boolean().parse(parsedState.state);
-        if (entity.config.uniqueId.includes('binary_sensor_mmwave')) {
+        if (includesBinarySensorMMWave(entity)) {
           this.debugEntity(`Capability: alarm_motion.mmwave: state event`, parsedState.state);
           this.setCapabilityValue('alarm_motion.mmwave', parsedState.state).catch((err) =>
             this.debugEntity('Failed to set alarm_motion.mmwave capability value', err)
           );
-        } else if (entity.config.uniqueId.includes('binary_sensor_occupancy')) {
+        } else if (includesBinarySensorOccupancy(entity)) {
           this.debugEntity(`Capability: alarm_motion: state event`, parsedState.state);
           this.setCapabilityValue('alarm_motion', parsedState.state).catch((err) =>
             this.debugEntity('Failed to set alarm_motion capability value', err)
