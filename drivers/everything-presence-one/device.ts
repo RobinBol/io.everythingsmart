@@ -524,7 +524,12 @@ class EverythingPresenceOneDevice extends Homey.Device {
         this.debugEntity(`Setting: ${entity.config.objectId}: state event`, parsedState.state);
         this.setSettings({
           [entity.config.objectId]: parsedState.state
-        });
+        }).catch((err) =>
+          this.debugEntity(
+            `Failed to set setting ${entity.config.objectId} to value: ${parsedState.state}, reason:`,
+            err
+          )
+        );
         break;
       case DRIVER_SETTINGS.MMWAVE_LED:
       case DRIVER_SETTINGS.ESP_32_STATUS_LED:
@@ -533,7 +538,12 @@ class EverythingPresenceOneDevice extends Homey.Device {
         this.debugEntity(`Setting: ${entity.config.objectId}: state event`, parsedState.state);
         this.setSettings({
           [entity.config.objectId]: parsedState.state
-        });
+        }).catch((err) =>
+          this.debugEntity(
+            `Failed to set setting ${entity.config.objectId} to value: ${parsedState.state}, reason:`,
+            err
+          )
+        );
 
         break;
       default:
