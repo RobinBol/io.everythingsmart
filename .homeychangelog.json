@@ -16,5 +16,8 @@
   },
   "1.0.5": {
     "en": "Fix a breaking change in the EP1 API that broke mmWave and occupancy detection."
+  },
+  "1.1.0": {
+    "en": "Added basic support for the Everything Presence Lite."
   }
 }
