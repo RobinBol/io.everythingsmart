@@ -122,22 +122,5 @@
       "id": "add_my_devices",
       "template": "add_devices"
     }
-  ],
-  "settings": [
-    {
-      "id": "host",
-      "type": "label",
-      "label": { "en": "Hostname" },
-      "value": ""
-    },
-    {
-      "id": "mac",
-      "type": "label",
-      "label": { "en": "MAC Address" },
-      "value": ""
-    },
-    { "id": "port", "type": "label", "label": { "en": "Port" }, "value": "" },
-    { "id": "espHomeVersion", "type": "label", "label": { "en": "ESPHome version" }, "value": "" },
-    { "id": "projectVersion", "type": "label", "label": { "en": "Project version" }, "value": "" }
   ]
 }
