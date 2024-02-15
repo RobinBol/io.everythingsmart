@@ -1,7 +1,9 @@
 {
   "pair": {
-    "title": "Adding Everything Presence One",
-    "description": "Make sure your Everything Presence One is flashed with the ESPHome firmware, powered on and on the same Wi-Fi network as Homey Pro. For instructions on how to flash click the button below.",
+    "title_epo": "Adding Everything Presence One",
+    "description_epo": "Make sure your Everything Presence One is flashed with the ESPHome firmware, powered on and on the same Wi-Fi network as Homey Pro. For instructions on how to flash click the button below.",
+    "title_epl": "Adding Everything Presence Lite",
+    "description_epl": "Make sure your Everything Presence Lite is flashed with the ESPHome firmware, powered on and on the same Wi-Fi network as Homey Pro. For instructions on how to flash click the button below.",
     "button": "Read more"
   },
   "error": {

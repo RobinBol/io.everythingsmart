@@ -8,17 +8,149 @@ import { Client, Connection } from '@2colors/esphome-native-api';
 
 import Homey from 'homey';
 
-const debug = Debug('epo');
+const debug = Debug('epl');
 
 const CONNECT_TIMEOUT = 15000;
 
+// epl:entity Register entity: occupancy: {
+//   config: {
+//     objectId: 'occupancy',
+//     key: 1263039176,
+//     name: 'Occupancy',
+//     uniqueId: 'everything-presence-lite-22354cbinary_sensoroccupancy',
+//     icon: '',
+//     deviceClass: 'occupancy',
+//     disabledByDefault: false,
+//     entityCategory: 0
+//   },
+//   id: 1263039176,
+//   name: 'Occupancy',
+//   type: 'BinarySensor'
+// } +0ms
+//   epl:entity Register entity: zone_1_occupancy: {
+//   config: {
+//     objectId: 'zone_1_occupancy',
+//     key: 2609283921,
+//     name: 'Zone 1 Occupancy',
+//     uniqueId: 'everything-presence-lite-22354cbinary_sensorzone_1_occupancy',
+//     icon: '',
+//     deviceClass: '',
+//     disabledByDefault: false,
+//     entityCategory: 0
+//   },
+//   id: 2609283921,
+//   name: 'Zone 1 Occupancy',
+//   type: 'BinarySensor'
+// } +21ms
+//   epl:entity Register entity: zone_2_occupancy: {
+//   config: {
+//     objectId: 'zone_2_occupancy',
+//     key: 2533351870,
+//     name: 'Zone 2 Occupancy',
+//     uniqueId: 'everything-presence-lite-22354cbinary_sensorzone_2_occupancy',
+//     icon: '',
+//     deviceClass: '',
+//     disabledByDefault: true,
+//     entityCategory: 0
+//   },
+//   id: 2533351870,
+//   name: 'Zone 2 Occupancy',
+//   type: 'BinarySensor'
+// } +19ms
+//   epl:entity Register entity: zone_3_occupancy: {
+//   config: {
+//     objectId: 'zone_3_occupancy',
+//     key: 3748869447,
+//     name: 'Zone 3 Occupancy',
+//     uniqueId: 'everything-presence-lite-22354cbinary_sensorzone_3_occupancy',
+//     icon: '',
+//     deviceClass: '',
+//     disabledByDefault: true,
+//     entityCategory: 0
+//   },
+//   id: 3748869447,
+//   name: 'Zone 3 Occupancy',
+//   type: 'BinarySensor'
+// } +20ms
+//   epl:entity Register entity: zone_4_occupancy: {
+//   config: {
+//     objectId: 'zone_4_occupancy',
+//     key: 979325612,
+//     name: 'Zone 4 Occupancy',
+//     uniqueId: 'everything-presence-lite-22354cbinary_sensorzone_4_occupancy',
+//     icon: '',
+//     deviceClass: '',
+//     disabledByDefault: true,
+//     entityCategory: 0
+//   },
+//   id: 979325612,
+//   name: 'Zone 4 Occupancy',
+//   type: 'BinarySensor'
+// } +20ms
+//   epl:entity Register entity: target_1_active: {
+//   config: {
+//     objectId: 'target_1_active',
+//     key: 366018787,
+//     name: 'Target 1 Active',
+//     uniqueId: 'everything-presence-lite-22354cbinary_sensortarget_1_active',
+//     icon: '',
+//     deviceClass: '',
+//     disabledByDefault: false,
+//     entityCategory: 0
+//   },
+//   id: 366018787,
+//   name: 'Target 1 Active',
+//   type: 'BinarySensor'
+// } +19ms
+//   epl:entity Register entity: target_2_active: {
+//   config: {
+//     objectId: 'target_2_active',
+//     key: 4280005854,
+//     name: 'Target 2 Active',
+//     uniqueId: 'everything-presence-lite-22354cbinary_sensortarget_2_active',
+//     icon: '',
+//     deviceClass: '',
+//     disabledByDefault: false,
+//     entityCategory: 0
+//   },
+//   id: 4280005854,
+//   name: 'Target 2 Active',
+//   type: 'BinarySensor'
+// } +25ms
+//   epl:entity Register entity: target_3_active: {
+//   config: {
+//     objectId: 'target_3_active',
+//     key: 3413445721,
+//     name: 'Target 3 Active',
+//     uniqueId: 'everything-presence-lite-22354cbinary_sensortarget_3_active',
+//     icon: '',
+//     deviceClass: '',
+//     disabledByDefault: false,
+//     entityCategory: 0
+//   },
+//   id: 3413445721,
+//   name: 'Target 3 Active',
+//   type: 'BinarySensor'
+// } +95ms
+//   epl:entity state {
+//   config: {
+//     objectId: 'occupancy',
+//     key: 1263039176,
+//     name: 'Occupancy',
+//     uniqueId: 'everything-presence-lite-22354cbinary_sensoroccupancy',
+//     icon: '',
+//     deviceClass: 'occupancy',
+//     disabledByDefault: false,
+//     entityCategory: 0
+//   },
+//   name: 'Occupancy',
+//   type: 'BinarySensor',
+//   unit: '',
+//   state: { key: 1263039176, state: true, missingState: false }
+// } +1ms
+
 enum DRIVER_SETTINGS {
-  ESP_32_STATUS_LED = 'esp32_status_led',
-  MMWAVE_LED = 'mmwave_led',
-  MMWAVE_ON_LATENCY = 'mmwave_on_latency',
-  MMWAVE_OFF_LATENCY = 'mmwave_off_latency',
-  MMWAVE_SENSITIVITY = 'mmwave_sensitivity',
-  MMWAVE_DISTANCE = 'mmwave_distance'
+  ESP_32_LED = 'esp32_led'
 }
 
 const entityStateSchema = z.object({
@@ -30,10 +162,10 @@ const entityStateSchema = z.object({
 // Example entity state
 // {
 //   config: {
-//     objectId: '_illuminance',
-//     key: 920262939,
-//     name: ' Illuminance',
-//     uniqueId: 'everything-presence-one-7083ccsensor_illuminance',
+//     objectId: 'illuminance',
+//     key: 1797020032,
+//     name: 'Illuminance',
+//     uniqueId: 'everything-presence-lite-22354csensorilluminance',
 //     icon: '',
 //     unitOfMeasurement: 'lx',
 //     accuracyDecimals: 1,
@@ -44,10 +176,10 @@ const entityStateSchema = z.object({
 //     disabledByDefault: false,
 //     entityCategory: 0
 //   },
-//   name: ' Illuminance',
+//   name: 'Illuminance',
 //   type: 'Sensor',
 //   unit: 'lx',
-//   state: { key: 920262939, state: 140.69387817382812, missingState: false }
+//   state: { key: 1797020032, state: 10.979330062866211, missingState: false }
 // }
 
 const entitySchema = z.object({
@@ -86,130 +218,6 @@ interface DiscoveryResult {
   };
 }
 
-// Example entity
-// {
-//   _events: [Object: null prototype] {
-//     error: [Function: bound propagateError] AsyncFunction
-//   },
-//   _eventsCount: 1,
-//   _maxListeners: undefined,
-//   handleState: [Function: bound handleState],
-//   handleMessage: [Function: bound handleMessage],
-//   config: {
-//     objectId: '_illuminance',
-//     key: 920262939,
-//     name: ' Illuminance',
-//     uniqueId: 'everything-presence-one-7083ccsensor_illuminance',
-//     icon: '',
-//     unitOfMeasurement: 'lx',
-//     accuracyDecimals: 1,
-//     forceUpdate: false,
-//     deviceClass: 'illuminance',
-//     stateClass: 1,
-//     lastResetType: 0,
-//     disabledByDefault: false,
-//     entityCategory: 0
-//   },
-//   type: 'Sensor',
-//   name: ' Illuminance',
-//   id: 920262939,
-//   connection: EsphomeNativeApiConnection {
-//     _events: [Object: null prototype] {
-//       'message.DisconnectRequest': [Function (anonymous)],
-//       'message.DisconnectResponse': [Function (anonymous)],
-//       'message.PingRequest': [Function (anonymous)],
-//       'message.GetTimeRequest': [Function (anonymous)],
-//       authorized: [AsyncFunction (anonymous)],
-//       unauthorized: [AsyncFunction (anonymous)],
-//       'message.DeviceInfoResponse': [AsyncFunction (anonymous)],
-//       'message.ListEntitiesBinarySensorResponse': [AsyncFunction (anonymous)],
-//       'message.ListEntitiesButtonResponse': [AsyncFunction (anonymous)],
-//       'message.ListEntitiesCameraResponse': [AsyncFunction (anonymous)],
-//       'message.ListEntitiesClimateResponse': [AsyncFunction (anonymous)],
-//       'message.ListEntitiesCoverResponse': [AsyncFunction (anonymous)],
-//       'message.ListEntitiesFanResponse': [AsyncFunction (anonymous)],
-//       'message.ListEntitiesLightResponse': [AsyncFunction (anonymous)],
-//       'message.ListEntitiesLockResponse': [AsyncFunction (anonymous)],
-//       'message.ListEntitiesMediaPlayerResponse': [AsyncFunction (anonymous)],
-//       'message.ListEntitiesNumberResponse': [AsyncFunction (anonymous)],
-//       'message.ListEntitiesSelectResponse': [AsyncFunction (anonymous)],
-//       'message.ListEntitiesSensorResponse': [AsyncFunction (anonymous)],
-//       'message.ListEntitiesSirenResponse': [AsyncFunction (anonymous)],
-//       'message.ListEntitiesSwitchResponse': [AsyncFunction (anonymous)],
-//       'message.ListEntitiesTextSensorResponse': [AsyncFunction (anonymous)],
-//       'message.SubscribeLogsResponse': [AsyncFunction (anonymous)],
-//       'message.BluetoothLEAdvertisementResponse': [AsyncFunction (anonymous)],
-//       error: [AsyncFunction (anonymous)],
-//       message: [Function: onMessage],
-//       'message.ListEntitiesDoneResponse': [Function],
-//       'message.BinarySensorStateResponse': [Array],
-//       'message.LightStateResponse': [Function: bound handleMessage],
-//       'message.SensorStateResponse': [Array]
-//     },
-//     _eventsCount: 30,
-//     _maxListeners: undefined,
-//     frameHelper: PlaintextFrameHelper {
-//       _events: [Object: null prototype],
-//       _eventsCount: 5,
-//       _maxListeners: undefined,
-//       host: 'everything-presence-one-7083cc.local',
-//       port: 6053,
-//       buffer: <Buffer >,
-//       socket: [Socket],
-//       [Symbol(kCapture)]: false
-//     },
-//     _connected: true,
-//     _authorized: true,
-//     port: 6053,
-//     host: 'everything-presence-one-7083cc.local',
-//     clientInfo: 'homey',
-//     password: '',
-//     encryptionKey: '',
-//     reconnect: true,
-//     reconnectTimer: null,
-//     reconnectInterval: 30000,
-//     pingTimer: Timeout {
-//       _idleTimeout: 15000,
-//       _idlePrev: [TimersList],
-//       _idleNext: [TimersList],
-//       _idleStart: 2919,
-//       _onTimeout: [AsyncFunction (anonymous)],
-//       _timerArgs: undefined,
-//       _repeat: 15000,
-//       _destroyed: false,
-//       [Symbol(refed)]: true,
-//       [Symbol(kHasPrimitive)]: false,
-//       [Symbol(asyncId)]: 47,
-//       [Symbol(triggerId)]: 0
-//     },
-//     pingInterval: 15000,
-//     pingAttempts: 3,
-//     pingCount: 0,
-//     [Symbol(kCapture)]: false
-//   },
-//   [Symbol(kCapture)]: false
-// }
-
-// const isEntity = (value: unknown): value is Entity => {
-//   return (
-//     typeof value === 'object' &&
-//     value !== null &&
-//     'name' in value &&
-//     typeof value.name === 'string' &&
-//     'type' in value &&
-//     typeof value.type === 'string' &&
-//     'config' in value &&
-//     typeof value.config === 'object' &&
-//     value.config !== null &&
-//     'objectId' in value.config &&
-//     typeof value.config.objectId === 'string' &&
-//     'deviceClass' in value.config &&
-//     typeof value.config.deviceClass === 'string' &&
-//     'uniqueId' in value.config &&
-//     typeof value.config.uniqueId === 'string'
-//   );
-// };
-
 /**
  * On Homey Pro (Early 2023) the host property in the discovery result ends with .local, on Homey
  * Pro (Early 2019) it doesn't.
@@ -234,22 +242,6 @@ function getErrorMessage(error: unknown) {
 }
 
 /**
- * Check if entity has uniqueId that matches the binary sensor mmWave. Note: it appears that between
- * 2023.4.2 (1.1.3) and 2023.7.1 (1.1.6) of the EP1 firmware a breaking change was introduced, the
- * uniqueId binary_sensor_mmwave was changed to binary_sensormmwave. GitHub issue:
- * https://github.com/EverythingSmartHome/everything-presence-one/issues/99
- *
- * @param entity
- * @returns
- */
-function includesBinarySensorMMWave(entity: ParsedEntityData) {
-  return (
-    entity.config.uniqueId.includes('binary_sensor_mmwave') ||
-    entity.config.uniqueId.includes('binary_sensormmwave')
-  );
-}
-
-/**
  * Check if entity has uniqueId that matches the binary sensor occupancy. Note: it appears that
  * between 2023.4.2 (1.1.3) and 2023.7.1 (1.1.6) of the EP1 firmware a breaking change was
  * introduced, the uniqueId binary_sensor_occupancy was changed to binary_sensoroccupancy. GitHub
@@ -259,13 +251,10 @@ function includesBinarySensorMMWave(entity: ParsedEntityData) {
  * @returns
  */
 function includesBinarySensorOccupancy(entity: ParsedEntityData) {
-  return (
-    entity.config.uniqueId.includes('binary_sensor_occupancy') ||
-    entity.config.uniqueId.includes('binary_sensoroccupancy')
-  );
+  return entity.config.uniqueId.includes('binary_sensoroccupancy');
 }
 
-class EverythingPresenceOneDevice extends Homey.Device {
+class EverythingPresenceLiteDevice extends Homey.Device {
   private debugEntity = debug.extend('entity');
   private debugClient = debug.extend('client');
   private debugDiscovery = debug.extend('discovery');
@@ -274,9 +263,9 @@ class EverythingPresenceOneDevice extends Homey.Device {
 
   /** OnInit is called when the device is initialized. */
   async onInit() {
-    this.log('EverythingPresenceOneDevice has been initialized');
+    this.log('EverythingPresenceLiteDevice has been initialized');
     this.connect().catch((err) => {
-      this.error('EverythingPresenceOneDevice failed to connect', err);
+      this.error('EverythingPresenceLiteDevice failed to connect', err);
     });
   }
 
@@ -293,7 +282,7 @@ class EverythingPresenceOneDevice extends Homey.Device {
     this.debugClient('connecting:', addressProps);
     this.client = new Client({
       ...addressProps,
-      clearSession: false,
+      clearSession: true,
       initializeDeviceInfo: false,
       initializeListEntities: false,
       initializeSubscribeStates: true,
@@ -453,7 +442,9 @@ class EverythingPresenceOneDevice extends Homey.Device {
     // Get entity
     const entity = this.entities.get(entityId)?.data;
     if (!entity) throw new Error(`Missing entity ${entityId}`);
-
+    if (entity.config.deviceClass === 'speed' || entity.config.deviceClass === 'distance') {
+      return;
+    }
     this.debugEntity(`state`, {
       config: entity.config,
       name: entity.name,
@@ -464,22 +455,6 @@ class EverythingPresenceOneDevice extends Homey.Device {
     });
 
     switch (entity.config.deviceClass) {
-      case 'temperature':
-        // Throw when state is not a number
-        z.number().parse(parsedState.state);
-        this.debugEntity(`Capability: measure_temperature: state event`, parsedState.state);
-        this.setCapabilityValue('measure_temperature', parsedState.state).catch((err) =>
-          this.debugEntity('Failed to set measure_temperature capability value', err)
-        );
-        break;
-      case 'humidity':
-        // Throw when state is not a number
-        z.number().parse(parsedState.state);
-        this.debugEntity(`Capability: measure_humidity: state event`, parsedState.state);
-        this.setCapabilityValue('measure_humidity', parsedState.state).catch((err) =>
-          this.debugEntity('Failed to set measure_humidity capability value', err)
-        );
-        break;
       case 'illuminance':
         // Throw when state is not a number
         z.number().parse(parsedState.state);
@@ -488,23 +463,10 @@ class EverythingPresenceOneDevice extends Homey.Device {
           this.debugEntity('Failed to set measure_luminance capability value', err)
         );
         break;
-      case 'motion':
-        // Throw when state is not a boolean
-        z.boolean().parse(parsedState.state);
-        this.debugEntity(`Capability: alarm_motion.pir: state event`, parsedState.state);
-        this.setCapabilityValue('alarm_motion.pir', parsedState.state).catch((err) =>
-          this.debugEntity('Failed to set alarm_motion.pir capability value', err)
-        );
-        break;
       case 'occupancy':
         // Throw when state is not a boolean
         z.boolean().parse(parsedState.state);
-        if (includesBinarySensorMMWave(entity)) {
-          this.debugEntity(`Capability: alarm_motion.mmwave: state event`, parsedState.state);
-          this.setCapabilityValue('alarm_motion.mmwave', parsedState.state).catch((err) =>
-            this.debugEntity('Failed to set alarm_motion.mmwave capability value', err)
-          );
-        } else if (includesBinarySensorOccupancy(entity)) {
+        if (includesBinarySensorOccupancy(entity)) {
           this.debugEntity(`Capability: alarm_motion: state event`, parsedState.state);
           this.setCapabilityValue('alarm_motion', parsedState.state).catch((err) =>
             this.debugEntity('Failed to set alarm_motion capability value', err)
@@ -517,24 +479,7 @@ class EverythingPresenceOneDevice extends Homey.Device {
 
     // Read and update settings
     switch (entity.config.objectId) {
-      case DRIVER_SETTINGS.MMWAVE_SENSITIVITY:
-      case DRIVER_SETTINGS.MMWAVE_ON_LATENCY:
-      case DRIVER_SETTINGS.MMWAVE_OFF_LATENCY:
-      case DRIVER_SETTINGS.MMWAVE_DISTANCE:
-        // Throw when state is not a number
-        z.number().parse(parsedState.state);
-        this.debugEntity(`Setting: ${entity.config.objectId}: state event`, parsedState.state);
-        this.setSettings({
-          [entity.config.objectId]: parsedState.state
-        }).catch((err) =>
-          this.debugEntity(
-            `Failed to set setting ${entity.config.objectId} to value: ${parsedState.state}, reason:`,
-            err
-          )
-        );
-        break;
-      case DRIVER_SETTINGS.MMWAVE_LED:
-      case DRIVER_SETTINGS.ESP_32_STATUS_LED:
+      case DRIVER_SETTINGS.ESP_32_LED:
         // Throw when state is not a boolean
         z.boolean().parse(parsedState.state);
         this.debugEntity(`Setting: ${entity.config.objectId}: state event`, parsedState.state);
@@ -555,7 +500,7 @@ class EverythingPresenceOneDevice extends Homey.Device {
 
   /** OnAdded is called when the user adds the device, called just after pairing. */
   async onAdded() {
-    this.log('EverythingPresenceOneDevice has been added');
+    this.log('EverythingPresenceLiteDevice has been added');
   }
 
   /**
@@ -574,15 +519,10 @@ class EverythingPresenceOneDevice extends Homey.Device {
     newSettings: { [key: string]: boolean | string | number | undefined | null };
     changedKeys: string[];
   }): Promise<string | void> {
-    this.log('EverythingPresenceOneDevice settings were changed');
+    this.log('EverythingPresenceLiteDevice settings were changed');
     for (const changedKey of changedKeys) {
       switch (changedKey) {
-        case DRIVER_SETTINGS.MMWAVE_SENSITIVITY:
-        case DRIVER_SETTINGS.MMWAVE_ON_LATENCY:
-        case DRIVER_SETTINGS.MMWAVE_OFF_LATENCY:
-        case DRIVER_SETTINGS.MMWAVE_DISTANCE:
-        case DRIVER_SETTINGS.MMWAVE_LED:
-        case DRIVER_SETTINGS.ESP_32_STATUS_LED:
+        case DRIVER_SETTINGS.ESP_32_LED:
           const entity = this.entities.get(changedKey);
           if (!entity) throw new Error(`Missing entity ${changedKey}`);
           if (!entity.original) throw new Error(`Missing original entity ${changedKey}`);
@@ -613,12 +553,12 @@ class EverythingPresenceOneDevice extends Homey.Device {
    * @param {string} name The new name
    */
   async onRenamed(name: string) {
-    this.log('EverythingPresenceOneDevice was renamed to:', name);
+    this.log('EverythingPresenceLiteDevice was renamed to:', name);
   }
 
   /** OnDeleted is called when the user deleted the device. */
   async onDeleted() {
-    this.log('EverythingPresenceOneDevice has been deleted');
+    this.log('EverythingPresenceLiteDevice has been deleted');
     this.disconnect();
   }
 
@@ -667,4 +607,4 @@ class EverythingPresenceOneDevice extends Homey.Device {
   }
 }
 
-module.exports = EverythingPresenceOneDevice;
+module.exports = EverythingPresenceLiteDevice;

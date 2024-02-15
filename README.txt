@@ -1,6 +1,12 @@
-Connect your Everything Presence One to Homey.
+Connect your Everything Smart devices to Homey.
 
-This app allows you to configure the Everything Presence One and use the following in Flows:
+This app adds support for the Everything Presence One and Everything Presence Lite.
+
+The following functionality is available for the Everything Presence Lite:
+- Luminance
+- Motion
+
+The following functionality is available for the Everything Presence One:
 - Luminance
 - Humidity
 - Temperature
@@ -8,7 +14,10 @@ This app allows you to configure the Everything Presence One and use the followi
 - Motion (as detected by the mmWave sensor)
 - Motion (a combination of the PIR and mmWave sensor)
 
-Supported versions
+Supported versions on Everything Presence Lite:
+- ESPHome version: 2023.12.8 in combination with Project version 1.0.1.
+
+Supported versions on Everything Presence One:
 - ESPHome version: 2023.4.2 in combination with Project version 1.1.3.
 - ESPHome version: 2023.7.1 in combination with Project version 1.1.6.
 

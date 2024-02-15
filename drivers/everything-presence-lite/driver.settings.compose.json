@@ -1,0 +1,57 @@
+[
+  {
+    "type": "group",
+    "label": { "en": "Information" },
+    "children": [
+      {
+        "id": "mac",
+        "type": "label",
+        "label": { "en": "MAC address" },
+        "value": ""
+      },
+      {
+        "id": "ip",
+        "type": "label",
+        "label": { "en": "IP address" },
+        "value": ""
+      },
+      {
+        "id": "host",
+        "type": "label",
+        "label": { "en": "Host address" },
+        "value": ""
+      },
+      {
+        "id": "port",
+        "type": "label",
+        "label": { "en": "Port" },
+        "value": ""
+      },
+      {
+        "id": "esp_home_version",
+        "type": "label",
+        "label": { "en": "ESPHome version" },
+        "value": ""
+      },
+      {
+        "id": "project_version",
+        "type": "label",
+        "label": { "en": "Project version" },
+        "value": ""
+      }
+    ]
+  },
+  {
+    "type": "group",
+    "label": { "en": "Status LEDs" },
+    "children": [
+      {
+        "id": "esp32_led",
+        "type": "checkbox",
+        "value": true,
+        "label": { "en": "ESP32 status LED" },
+        "hint": { "en": "Enable or disable the ESP32 status LED." }
+      }
+    ]
+  }
+]
