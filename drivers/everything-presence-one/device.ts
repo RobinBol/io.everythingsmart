@@ -270,6 +270,7 @@ class EverythingPresenceOneDevice extends Homey.Device {
   private debugClient = debug.extend('client');
   private debugDiscovery = debug.extend('discovery');
   private client?: Client;
+  private connectPromise?: Promise<void>;
   private entities: Map<string, { data: ParsedEntityData; original: unknown }> = new Map();
 
   /** OnInit is called when the device is initialized. */
@@ -286,6 +287,9 @@ class EverythingPresenceOneDevice extends Homey.Device {
    * @returns
    */
   async connect(): Promise<Client> {
+    // Make sure current connection is disconnected
+    await this.disconnect();
+
     const addressProps = {
       host: formatHostname(this.getStoreValue('host')),
       port: this.getStoreValue('port')
@@ -320,7 +324,6 @@ class EverythingPresenceOneDevice extends Homey.Device {
         );
         return;
       }
-      this.disconnect();
       this.connect().catch((connectError) => {
         this.log('Could not re-connect after error', connectError);
         this.setUnavailable(this.homey.__('error.unavailable')).catch((err) =>
@@ -329,7 +332,7 @@ class EverythingPresenceOneDevice extends Homey.Device {
       });
     });
 
-    return new Promise((resolve, reject) => {
+    this.connectPromise = new Promise((resolve, reject) => {
       const connectTimeout = this.homey.setTimeout(
         () => reject(new Error(this.homey.__('error.connect_timeout'))),
         CONNECT_TIMEOUT
@@ -359,9 +362,11 @@ class EverythingPresenceOneDevice extends Homey.Device {
         return resolve(this.client);
       });
     });
+
+    return this.connectPromise;
   }
 
-  disconnect() {
+  async disconnect() {
     this.debugClient('disconnect');
     this.client?.disconnect();
     this.client?.removeAllListeners();
@@ -377,6 +382,8 @@ class EverythingPresenceOneDevice extends Homey.Device {
       }
       entity.original.removeAllListeners();
     });
+
+    await this.connectPromise?.catch(() => undefined);
   }
 
   /**
@@ -619,7 +626,7 @@ class EverythingPresenceOneDevice extends Homey.Device {
   /** OnDeleted is called when the user deleted the device. */
   async onDeleted() {
     this.log('EverythingPresenceOneDevice has been deleted');
-    this.disconnect();
+    this.disconnect().catch(() => undefined);
   }
 
   /**
