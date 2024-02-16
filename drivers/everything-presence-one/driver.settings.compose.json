@@ -71,7 +71,7 @@
         "id": "mmwave_sensitivity",
         "type": "number",
         "label": { "en": "mmWave sensitivity" },
-        "value": 5,
+        "value": 7,
         "min": 0,
         "max": 9,
         "hint": {
@@ -82,7 +82,7 @@
         "id": "mmwave_distance",
         "type": "number",
         "label": { "en": "mmWave distance" },
-        "value": 3,
+        "value": 315,
         "min": 0,
         "max": 800,
         "step": 15,
@@ -95,10 +95,10 @@
         "id": "mmwave_on_latency",
         "type": "number",
         "label": { "en": "mmWave on latency" },
-        "value": 3,
+        "value": 0,
         "min": 0,
-        "max": 60,
-        "step": 0.5,
+        "max": 2,
+        "step": 0.25,
         "units": { "en": "seconds" },
         "hint": {
           "en": "Configure the on latency of the mmWave sensor. On latency sets for how long the object must be moving for, before it is considered as moving and thus triggering the sensor. This is important for accurate mmWave occupancy detection. See the Everything Presence One documentation for more information."
@@ -108,10 +108,10 @@
         "id": "mmwave_off_latency",
         "type": "number",
         "label": { "en": "mmWave off latency" },
-        "value": 3,
+        "value": 15,
         "min": 1,
-        "max": 60,
-        "step": 1,
+        "max": 600,
+        "step": 5,
         "units": { "en": "seconds" },
         "hint": {
           "en": "Configure the off latency of the mmWave sensor. Off latency sets for how long the object must be still, before it is considered as non-moving and thus resetting the sensor. This is important for accurate mmWave occupancy detection. See the Everything Presence One documentation for more information."

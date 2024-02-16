@@ -48,7 +48,7 @@
       {
         "id": "esp32_led",
         "type": "checkbox",
-        "value": true,
+        "value": false,
         "label": { "en": "ESP32 status LED" },
         "hint": { "en": "Enable or disable the ESP32 status LED." }
       }
