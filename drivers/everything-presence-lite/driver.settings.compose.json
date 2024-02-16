@@ -53,5 +53,24 @@
         "hint": { "en": "Enable or disable the ESP32 status LED." }
       }
     ]
+  },
+  {
+    "type": "group",
+    "label": { "en": "mmWave" },
+    "children": [
+      {
+        "id": "max_distance",
+        "type": "number",
+        "label": { "en": "mmWave distance" },
+        "value": 600,
+        "min": 0,
+        "max": 600,
+        "step": 1,
+        "units": { "en": "cm" },
+        "hint": {
+          "en": "Configure the distance of the room the sensor is placed in. This is important for accurate mmWave occupancy detection. See the Everything Presence Lite documentation for more information."
+        }
+      }
+    ]
   }
 ]

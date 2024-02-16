@@ -150,7 +150,8 @@ const CONNECT_TIMEOUT = 15000;
 // } +1ms
 
 enum DRIVER_SETTINGS {
-  ESP_32_LED = 'esp32_led'
+  ESP_32_LED = 'esp32_led',
+  MMWAVE_DISTANCE = 'max_distance' // Why is this id max_distance and not distance?
 }
 
 const entityStateSchema = z.object({
@@ -486,6 +487,19 @@ class EverythingPresenceLiteDevice extends Homey.Device {
 
     // Read and update settings
     switch (entity.config.objectId) {
+      case DRIVER_SETTINGS.MMWAVE_DISTANCE:
+        // Throw when state is not a number
+        z.number().parse(parsedState.state);
+        this.debugEntity(`Setting: ${entity.config.objectId}: state event`, parsedState.state);
+        this.setSettings({
+          [entity.config.objectId]: parsedState.state
+        }).catch((err) =>
+          this.debugEntity(
+            `Failed to set setting ${entity.config.objectId} to value: ${parsedState.state}, reason:`,
+            err
+          )
+        );
+        break;
       case DRIVER_SETTINGS.ESP_32_LED:
         // Throw when state is not a boolean
         z.boolean().parse(parsedState.state);
@@ -529,6 +543,7 @@ class EverythingPresenceLiteDevice extends Homey.Device {
     this.log('EverythingPresenceLiteDevice settings were changed');
     for (const changedKey of changedKeys) {
       switch (changedKey) {
+        case DRIVER_SETTINGS.MMWAVE_DISTANCE:
         case DRIVER_SETTINGS.ESP_32_LED:
           const entity = this.entities.get(changedKey);
           if (!entity) throw new Error(`Missing entity ${changedKey}`);
