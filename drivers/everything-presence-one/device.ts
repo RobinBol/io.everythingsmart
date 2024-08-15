@@ -392,6 +392,7 @@ class EverythingPresenceOneDevice extends Homey.Device {
    * @param entity
    */
   registerEntity(entity: unknown) {
+    this.log('registerEntity', entity);
     // Parse entity data
     const parseEntityResult = entitySchema.safeParse(entity);
     if (!parseEntityResult.success) {
