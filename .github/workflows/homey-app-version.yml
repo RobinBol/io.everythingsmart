@@ -19,8 +19,25 @@ on:
 
 jobs:
   main:
-    uses: athombv/athom-github-workflow/.github/workflows/homey-app-version.yml@master
-    secrets: inherit
-    with:
-      version: ${{ github.event.inputs.version }}
-      changelog: ${{ github.event.inputs.changelog }}
+    name: Update Homey App Version
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Update Homey App Version
+        uses: athombv/github-action-homey-app-version@master
+        id: update_app_version
+        with:
+          version: ${{ inputs.version }}
+          changelog: ${{ inputs.changelog }}
+
+      - name: Commit & Push
+        run: |
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add -A
+          git commit -m "Update Homey App Version to v${{ steps.update_app_version.outputs.version }}"
+          git tag "v${{ steps.update_app_version.outputs.version }}"
+
+          git push origin HEAD --tags
