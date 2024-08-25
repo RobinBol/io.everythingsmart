@@ -40,3 +40,5 @@ jobs:
           git tag "v${{ steps.update_app_version.outputs.version }}"
 
           git push origin HEAD --tags
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
