@@ -1,21 +1,30 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "io.everythingsmart",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "compatibility": ">=5.0.0",
   "sdk": 3,
-  "platforms": ["local"],
+  "platforms": [
+    "local"
+  ],
   "name": {
     "en": "Everything Smart"
   },
   "tags": {
-    "en": ["everything", "presence", "everythingsmart", "mmwave"]
+    "en": [
+      "everything",
+      "presence",
+      "everythingsmart",
+      "mmwave"
+    ]
   },
   "brandColor": "#5621F5",
   "description": {
     "en": "Builing a Better Smart Home"
   },
-  "category": ["security"],
+  "category": [
+    "security"
+  ],
   "permissions": [],
   "images": {
     "small": "/assets/images/small.png",
@@ -47,9 +56,16 @@
         "en": "Everything Presence Lite"
       },
       "class": "sensor",
-      "capabilities": ["measure_luminance", "alarm_motion"],
-      "platforms": ["local"],
-      "connectivity": ["lan"],
+      "capabilities": [
+        "measure_luminance",
+        "alarm_motion"
+      ],
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "lan"
+      ],
       "discovery": "everything-presence-lite",
       "images": {
         "small": "/drivers/everything-presence-lite/assets/images/small.jpg",
@@ -281,8 +297,12 @@
           }
         }
       },
-      "platforms": ["local"],
-      "connectivity": ["lan"],
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "lan"
+      ],
       "discovery": "everything-presence-one",
       "images": {
         "small": "/drivers/everything-presence-one/assets/images/small.jpg",

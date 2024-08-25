@@ -22,5 +22,8 @@
   },
   "1.1.1": {
     "en": "Fixed an issue that could cause devices to remain unavailable after power loss, added max_distance setting to Everything Presence Lite."
+  },
+  "1.1.2": {
+    "en": "Fixes an issue that could cause the app to crash in rare circumstances."
   }
 }
