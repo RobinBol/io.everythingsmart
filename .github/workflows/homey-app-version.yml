@@ -16,6 +16,10 @@ on:
         description: Changelog
         required: true
 
+# Needed in order to push the commit and create a release
+permissions:
+  contents: write
+
 jobs:
   main:
     name: Update Homey App Version
@@ -33,13 +37,14 @@ jobs:
           version: ${{ inputs.version }}
           changelog: ${{ inputs.changelog }}
 
+        # Needed to undo the changes made to app.json by the version action
+      - run: npm ci
+      - run: npm run format
+
       - name: Commit & Push
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-          # Needed to undo the changes made to app.json by the version action
-          npm run format
 
           git add -A
           git commit -m "Update Homey App Version to v${{ steps.update_app_version.outputs.version }}"
