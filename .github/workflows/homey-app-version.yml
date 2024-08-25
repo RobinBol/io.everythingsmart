@@ -40,5 +40,7 @@ jobs:
           git tag "v${{ steps.update_app_version.outputs.version }}"
 
           git push origin HEAD --tags
+          gh release create "v${{ steps.update_app_version.outputs.version }}" -t "v${{ steps.update_app_version.outputs.version }}" --notes "" --generate-notes
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
