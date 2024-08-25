@@ -5,7 +5,7 @@
   "scripts": {
     "build": "tsc && homey app build && npm run format",
     "lint": "eslint --ext .js,.ts --ignore-path .gitignore .",
-    "format": "homey app build && prettier --write .",
+    "format": "prettier --write .",
     "prepare": "husky install"
   },
   "devDependencies": {
