@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "main": "app.ts",
   "scripts": {
-    "build": "tsc && npm run format && homey app build",
+    "build": "tsc && homey app build && npm run format",
     "lint": "eslint --ext .js,.ts --ignore-path .gitignore .",
-    "format": "prettier --write . && homey app build",
+    "format": "homey app build && prettier --write .",
     "prepare": "husky install"
   },
   "devDependencies": {
