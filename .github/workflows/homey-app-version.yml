@@ -22,6 +22,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
 
       - name: Update Homey App Version
         uses: athombv/github-action-homey-app-version@master
@@ -34,6 +37,9 @@ jobs:
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          # Needed to undo the changes made to app.json by the version action
+          npm run format
 
           git add -A
           git commit -m "Update Homey App Version to v${{ steps.update_app_version.outputs.version }}"
