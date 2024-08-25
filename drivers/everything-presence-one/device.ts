@@ -368,7 +368,14 @@ class EverythingPresenceOneDevice extends Homey.Device {
 
   async disconnect() {
     this.debugClient('disconnect');
-    this.client?.disconnect();
+
+    // Try to disconnect client, note: this might fail in some cases so catch it
+    try {
+      this.client?.disconnect();
+    } catch (err) {
+      this.error('Failed to disconnect client', getErrorMessage(err));
+    }
+
     this.client?.removeAllListeners();
     this.entities.forEach((entity) => {
       // Validate entity.original.removeAllListeners
