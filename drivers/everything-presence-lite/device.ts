@@ -430,9 +430,13 @@ class EverythingPresenceLiteDevice extends Homey.Device {
     }
 
     // Subscribe to entity events
-    entity.on(`state`, (state: unknown) =>
-      this.onEntityState(parseEntityResult.data.config.objectId, state)
-    );
+    entity.on(`state`, (state: unknown) => {
+      try {
+        this.onEntityState(parseEntityResult.data.config.objectId, state);
+      } catch (err) {
+        this.debugEntity('Failed to handle entity state event', err);
+      }
+    });
   }
 
   /**
@@ -442,17 +446,8 @@ class EverythingPresenceLiteDevice extends Homey.Device {
    * @param state
    */
   onEntityState(entityId: string, state: unknown) {
-    const parseResult = entityStateSchema.safeParse(state);
-    if (!parseResult.success) {
-      this.debugEntity(
-        `Got invalid entity state for entityId ${entityId}, error:`,
-        parseResult.error,
-        state
-      );
-      return;
-    }
-
-    const parsedState = parseResult.data;
+    // Skip parsing which may cause CPU spikes
+    const parsedState = state as z.infer<typeof entityStateSchema>;
 
     // Get entity
     const entity = this.entities.get(entityId)?.data;
@@ -471,21 +466,21 @@ class EverythingPresenceLiteDevice extends Homey.Device {
 
     switch (entity.config.deviceClass) {
       case 'illuminance':
-        // Throw when state is not a number
-        z.number().parse(parsedState.state);
-        this.debugEntity(`Capability: measure_luminance: state event`, parsedState.state);
-        this.setCapabilityValue('measure_luminance', parsedState.state).catch((err) =>
-          this.debugEntity('Failed to set measure_luminance capability value', err)
-        );
+        if (typeof parsedState?.state === 'number') {
+          this.debugEntity(`Capability: measure_luminance: state event`, parsedState?.state);
+          this.setCapabilityValue('measure_luminance', parsedState?.state).catch((err) =>
+            this.debugEntity('Failed to set measure_luminance capability value', err)
+          );
+        }
         break;
       case 'occupancy':
-        // Throw when state is not a boolean
-        z.boolean().parse(parsedState.state);
-        if (includesBinarySensorOccupancy(entity)) {
-          this.debugEntity(`Capability: alarm_motion: state event`, parsedState.state);
-          this.setCapabilityValue('alarm_motion', parsedState.state).catch((err) =>
-            this.debugEntity('Failed to set alarm_motion capability value', err)
-          );
+        if (typeof parsedState?.state === 'boolean') {
+          if (includesBinarySensorOccupancy(entity)) {
+            this.debugEntity(`Capability: alarm_motion: state event`, parsedState?.state);
+            this.setCapabilityValue('alarm_motion', parsedState?.state).catch((err) =>
+              this.debugEntity('Failed to set alarm_motion capability value', err)
+            );
+          }
         }
         break;
       default:
@@ -495,31 +490,30 @@ class EverythingPresenceLiteDevice extends Homey.Device {
     // Read and update settings
     switch (entity.config.objectId) {
       case DRIVER_SETTINGS.MMWAVE_DISTANCE:
-        // Throw when state is not a number
-        z.number().parse(parsedState.state);
-        this.debugEntity(`Setting: ${entity.config.objectId}: state event`, parsedState.state);
-        this.setSettings({
-          [entity.config.objectId]: parsedState.state
-        }).catch((err) =>
-          this.debugEntity(
-            `Failed to set setting ${entity.config.objectId} to value: ${parsedState.state}, reason:`,
-            err
-          )
-        );
+        if (typeof parsedState?.state === 'number') {
+          this.debugEntity(`Setting: ${entity.config.objectId}: state event`, parsedState?.state);
+          this.setSettings({
+            [entity.config.objectId]: parsedState?.state
+          }).catch((err) =>
+            this.debugEntity(
+              `Failed to set setting ${entity.config.objectId} to value: ${parsedState?.state}, reason:`,
+              err
+            )
+          );
+        }
         break;
       case DRIVER_SETTINGS.ESP_32_LED:
-        // Throw when state is not a boolean
-        z.boolean().parse(parsedState.state);
-        this.debugEntity(`Setting: ${entity.config.objectId}: state event`, parsedState.state);
-        this.setSettings({
-          [entity.config.objectId]: parsedState.state
-        }).catch((err) =>
-          this.debugEntity(
-            `Failed to set setting ${entity.config.objectId} to value: ${parsedState.state}, reason:`,
-            err
-          )
-        );
-
+        if (typeof parsedState?.state === 'boolean') {
+          this.debugEntity(`Setting: ${entity.config.objectId}: state event`, parsedState?.state);
+          this.setSettings({
+            [entity.config.objectId]: parsedState?.state
+          }).catch((err) =>
+            this.debugEntity(
+              `Failed to set setting ${entity.config.objectId} to value: ${parsedState?.state}, reason:`,
+              err
+            )
+          );
+        }
         break;
       default:
         this.debugEntity('Unknown setting:', entity.config.objectId);
