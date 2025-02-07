@@ -25,5 +25,8 @@
   },
   "1.1.3": {
     "en": "Fixes an issue that could cause the app to crash in rare circumstances."
+  },
+  "1.1.4": {
+    "en": "Made parsing events from EP less CPU intensive."
   }
 }
