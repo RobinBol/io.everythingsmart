@@ -1,5 +1,7 @@
 # io.everythingsmart
 
+This repository is archived as it has been replaced with an official integration: [https://homey.app/a/com.everything.presence](https://homey.app/a/com.everything.presence).
+
 [![Lint](https://github.com/RobinBol/io.everythingsmart/actions/workflows/lint.yml/badge.svg)](https://github.com/RobinBol/io.everythingsmart/actions/workflows/lint.yml)
 [![Build](https://github.com/RobinBol/io.everythingsmart/actions/workflows/build.yml/badge.svg)](https://github.com/RobinBol/io.everythingsmart/actions/workflows/build.yml)
 
